@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EcoLift</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.tailwindcss.com" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EcoLift.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EcoLift</a>
+            <div class="container">
+                <a class="navbar-brand" style="margin-right: 40px" asp-area="" asp-controller="Home" asp-action="Index">EcoLift - Munich</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,26 +23,86 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">About</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">How It Works</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Contact</a>
+                        </li>
+                       
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div >
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - EcoLift - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer id="footer" class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-section-title">Munich Carpool</h3>
+                    <p class="footer-section-description">A green initiative by the Munich Municipal Council to reduce traffic congestion and carbon emissions.</p>
+                    <div class="footer-social-links">
+                        <i class="fab fa-facebook-f footer-social-link"></i>
+                        <i class="fab fa-twitter footer-social-link"></i>
+                        <i class="fab fa-instagram footer-social-link"></i>
+                        <i class="fab fa-linkedin-in footer-social-link"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title text-lg">Quick Links</h3>
+                    <ul class="footer-links-list">
+                        <li><span class="footer-link">Home</span></li>
+                        <li><span class="footer-link">About Us</span></li>
+                        <li><span class="footer-link">How It Works</span></li>
+                        <li><span class="footer-link">Contact</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title text-lg">Resources</h3>
+                    <ul class="footer-links-list">
+                        <li><span class="footer-link">FAQs</span></li>
+                        <li><span class="footer-link">Safety Guidelines</span></li>
+                        <li><span class="footer-link">Terms of Service</span></li>
+                        <li><span class="footer-link">Privacy Policy</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title">Contact Us</h3>
+                    <ul class="footer-links-list">
+                        <li class="footer-contact-item">
+                            <i class="fas fa-map-marker-alt footer-contact-icon"></i>
+                            <span class="footer-contact-text">Munich Municipal Council, Marienplatz 8, 80331 Munich</span>
+                        </li>
+                        <li class="footer-contact-item flex-center">
+                            <i class="fas fa-envelope footer-contact-icon"></i>
+                            <span class="footer-contact-text">info@munichcarpool.de</span>
+                        </li>
+                        <li class="footer-contact-item flex-center">
+                            <i class="fas fa-phone footer-contact-icon"></i>
+                            <span class="footer-contact-text">+49 89 123 456 789</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-divider">
+                <p>© 2023 Munich Carpool. All rights reserved.</p>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

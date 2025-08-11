@@ -1,8 +1,209 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@* Hero Section *@
+<section id="hero" style="height: 600px; position: relative;">
+    <img class="hero-img" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/78e9b83c14-e008534c50e2fbfa6a57.png" alt="scenic mountain road with cars in Munich, aerial view, high quality, cinematic">
+    <div class="hero-img-overlay"></div>
+    <div class="container" style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100%;padding-inline: 1rem; position: relative">
+        <h1 class="hero-title text-white" >Commute Smarter, Save the Environment</h1>
+        <p class="text-xl text-white text-center mb-10">Find trusted carpooling partners for your daily commute in Munich</p>
+        <div id="search-widget" class="search-widget">
+            <div class="search-grid">
+                <div class="search-field">
+                    <label class="search-label">Leaving from</label>
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-map-marker-alt search-icon"></i>
+                        <input type="text" placeholder="City or address" class="search-input">
+                    </div>
+                </div>
+                <div class="search-field">
+                    <label class="search-label">Going to</label>
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-map-marker-alt search-icon"></i>
+                        <input type="text" placeholder="City or address" class="search-input">
+                    </div>
+                </div>
+                <div class="search-field">
+                    <label class="search-label">When</label>
+                    <div class="search-input-wrapper">
+                        <i class="far fa-calendar search-icon"></i>
+                        <input type="date" class="search-input">
+                    </div>
+                </div>
+                <div class="search-field">
+                    <label class="search-label">Passengers</label>
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-users search-icon"></i>
+                        <select class="search-input search-select">
+                            <option value="1">1 passenger</option>
+                            <option value="2">2 passengers</option>
+                            <option value="3">3 passengers</option>
+                            <option value="4">4 passengers</option>
+                        </select>
+                        <i class="fas fa-chevron-down search-icon-right"></i>
+                    </div>
+                </div>
+            </div>
+                           <button class="search-button-new">
+                  <i class="fas fa-search search-button-icon"></i>
+                  Find a ride
+              </button>
+        </div>
+    </div>
+</section>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@* Information Section *@
+<section id="info-section" class="info-section">
+    <div class="container">
+        <div class="info-container">
+            <h2 class="info-title">Munich Municipal Council Initiative</h2>
+            <p class="info-description">
+                The Munich Carpool is a green initiative by the Munich Municipal Council to reduce traffic congestion and carbon emissions. Join us in making Munich a cleaner, more sustainable city.
+            </p>
+            <span class="info-link">Learn more about the initiative</span>
+        </div>
+
+        <!-- Features Summary -->
+        <div id="features" class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-container">
+                    <i class="fas fa-search feature-icon"></i>
+                </div>
+                <h3 class="feature-title">Find a ride</h3>
+                <p class="feature-description">Search for available rides based on your route, date, and time preferences.</p>
+                <span class="feature-link">Search now</span>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-container">
+                    <i class="fas fa-car feature-icon"></i>
+                </div>
+                <h3 class="feature-title">Offer a ride</h3>
+                <p class="feature-description">Share your journey with others heading in the same direction and split costs.</p>
+                <span class="feature-link">Offer now</span>
+                </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-container">
+                    <i class="fas fa-star feature-icon"></i>
+                </div>
+                <h3 class="feature-title">Read reviews</h3>
+                <p class="feature-description">Check ratings and reviews to find trusted carpooling partners in the community.</p>
+                <span class="feature-link">Explore reviews</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* How It Works Section *@
+<section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2 class="how-it-works-title">How Munich Carpool Works</h2>
+            
+            <div class="how-it-works-grid">
+                <div class="how-it-works-step">
+                    <div class="how-it-works-card">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Search</h3>
+                        <p class="step-description">Enter your departure, destination, and date to find available rides.</p>
+                    </div>
+                    <div class="step-connector"></div>
+                </div>
+                
+                <div class="how-it-works-step">
+                    <div class="how-it-works-card">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Book</h3>
+                        <p class="step-description">Choose a ride that matches your needs and book your seat.</p>
+                    </div>
+                    <div class="step-connector"></div>
+                </div>
+                
+                <div class="how-it-works-step">
+                    <div class="how-it-works-card">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Travel</h3>
+                        <p class="step-description">Meet your driver at the agreed location and enjoy your journey.</p>
+                    </div>
+                    <div class="step-connector"></div>
+                </div>
+                
+                <div class="how-it-works-step">
+                    <div class="how-it-works-card">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Review</h3>
+                        <p class="step-description">Rate your experience and help build a trusted community.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+@* Benefits Section *@
+<section id="benefits" class="benefits-section">
+    <div class="container">
+        <div class="benefits-grid">
+            <div>
+                <h2 class="benefits-title">Why Choose Munich Carpool?</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon-container">
+                            <i class="fas fa-euro-sign benefit-icon"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3 class="benefit-title">Save Money</h3>
+                            <p class="benefit-description">Share fuel costs and reduce your daily commuting expenses.</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon-container">
+                            <i class="fas fa-leaf benefit-icon"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3 class="benefit-title">Eco-Friendly</h3>
+                            <p class="benefit-description">Reduce your carbon footprint and help make Munich greener.</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon-container">
+                            <i class="fas fa-users benefit-icon"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3 class="benefit-title">Community</h3>
+                            <p class="benefit-description">Meet new people and build connections with fellow commuters.</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon-container">
+                            <i class="fas fa-clock benefit-icon"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3 class="benefit-title">Flexibility</h3>
+                            <p class="benefit-description">Find rides that match your schedule and travel needs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="benefits-image-container">
+                <img class="benefits-image" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/eb8c0eb4f5-9ad6b69b4f3320c38b00.png" alt="happy diverse group of people carpooling in a modern car, smiling, urban setting, high quality photography">
+            </div>
+        </div>
+    </div>
+</section>
+
+@* CTA Section *@
+<section id="cta" class="cta-section">
+    <div class="container cta-container">
+        <h2 class="cta-title">Ready to start carpooling?</h2>
+        <p class="cta-description">Join thousands of Munich residents already saving money and reducing their carbon footprint.</p>
+        <div class="cta-buttons">
+            <button class="cta-button-primary">Find a ride</button>
+            <button class="cta-button-secondary">Offer a ride</button>
+        </div>
+    </div>
+</section>
