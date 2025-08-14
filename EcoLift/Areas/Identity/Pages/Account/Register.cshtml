@@ -1,0 +1,80 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="login-container">
+    <div class="login-card">
+     
+
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="login-form">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            <div class="form-group">
+                <label asp-for="Input.FirstName" class="form-label">First Name</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input asp-for="Input.FirstName" class="form-input" autocomplete="given-name" aria-required="true" placeholder="Enter your first name" />
+                </div>
+                <span asp-validation-for="Input.FirstName" class="validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.LastName" class="form-label">Last Name</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input asp-for="Input.LastName" class="form-input" autocomplete="family-name" aria-required="true" placeholder="Enter your last name" />
+                </div>
+                <span asp-validation-for="Input.LastName" class="validation-error"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input asp-for="Input.Email" class="form-input" autocomplete="username" aria-required="true" placeholder="Enter your email" />
+                </div>
+                <span asp-validation-for="Input.Email" class="validation-error"></span>
+            </div>
+
+            
+
+            <div class="form-group">
+                <label asp-for="Input.Password" class="form-label">Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input asp-for="Input.Password" class="form-input" autocomplete="new-password" aria-required="true" placeholder="Create a password" />
+                </div>
+                <span asp-validation-for="Input.Password" class="validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input asp-for="Input.ConfirmPassword" class="form-input" autocomplete="new-password" aria-required="true" placeholder="Confirm your password" />
+                </div>
+                <span asp-validation-for="Input.ConfirmPassword" class="validation-error"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="login-button">
+                <span>Create Account</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <div class="login-divider">
+                <span>Already have an account?</span>
+            </div>
+
+            <div class="login-links">
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="register-link">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

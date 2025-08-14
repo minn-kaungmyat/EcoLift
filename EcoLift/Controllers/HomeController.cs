@@ -16,12 +16,13 @@ namespace EcoLift.Controllers
         public IActionResult Index()
         {
             return View();
-        }
+        }   
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        //public IActionResult Privacy()
+        //{ 
+        //    ViewData["HideFooter"] = true;
+        //    return View();
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

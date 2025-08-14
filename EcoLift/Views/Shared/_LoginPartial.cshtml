@@ -3,26 +3,75 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="login-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="  ">Logout</button>
-        </form>
-    </li>
-}
-else
-{<li class="nav-item">
-            <a class="login-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+<div class="navbar-nav navbar-actions">
+    <!-- Search Button -->
+    <div class="nav-item me-3">
+        <a href="#" class="btn btn-outline-primary btn-sm search-btn" title="Search Rides">
+            <i class="fas fa-search me-1"></i>
+            Search
+        </a>
+    </div>
 
-    <li class="nav-item">
-        <a class="signup-link" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
-    </li>
-    
-}
-</ul>
+    <!-- Create Ride Button -->
+    <div class="nav-item me-3">
+        <a href="#" class="btn btn-primary btn-sm create-ride-btn" title="Create a Ride">
+            <i class="fas fa-plus me-1"></i>
+            Create Ride
+        </a>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="nav-item dropdown">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="nav-link dropdown-toggle profile-dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user-circle me-1"></i>
+                <span class="profile-text">@User.Identity?.Name</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu">
+                <li>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        <i class="fas fa-user me-2"></i>Profile
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-history me-2"></i>My Rides
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-bookmark me-2"></i>Bookings
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <a class="nav-link dropdown-toggle profile-dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user-circle me-1"></i>
+                <span class="profile-text">Guest</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu">
+                <li>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">
+                        <i class="fas fa-user-plus me-2"></i>Sign Up
+                    </a>
+                </li>
+            </ul>
+        }
+    </div>
+</div>

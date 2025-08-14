@@ -1,0 +1,65 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="login-container">
+    <div class="login-card">
+        <form id="account" method="post" class="login-form">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            
+            <div class="form-group">
+                <label asp-for="Input.Email" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input asp-for="Input.Email" class="form-input" autocomplete="username" aria-required="true" placeholder="Enter your email" />
+                </div>
+                <span asp-validation-for="Input.Email" class="validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Password" class="form-label">Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input asp-for="Input.Password" class="form-input" autocomplete="current-password" aria-required="true" placeholder="Enter your password" />
+                </div>
+                <span asp-validation-for="Input.Password" class="validation-error"></span>
+            </div>
+
+            <div class="form-options">
+                <label class="checkbox-wrapper">
+                    <input class="form-checkbox" asp-for="Input.RememberMe" />
+                    <span class="checkmark"></span>
+                    <span class="checkbox-label">Remember me</span>
+                </label>
+                <a id="forgot-password" asp-page="./ForgotPassword" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <button id="login-submit" type="submit" class="login-button">
+                <span>Sign In</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <div class="login-divider">
+                <span>New to EcoLift?</span>
+            </div>
+
+            <div class="login-links">
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="register-link">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </a>
+                @* <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="resend-link">
+                    <i class="fas fa-envelope"></i>
+                    Resend Confirmation
+                </a> *@
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
