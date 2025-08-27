@@ -4,6 +4,7 @@ using EcoLift.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcoLift.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250821140748_IncreaseLocationFieldSizes")]
+    partial class IncreaseLocationFieldSizes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,9 +137,6 @@ namespace EcoLift.Data.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ConversationId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SeatsBooked")
                         .HasColumnType("int");
 
@@ -153,8 +153,6 @@ namespace EcoLift.Data.Migrations
 
                     b.HasKey("BookingId");
 
-                    b.HasIndex("ConversationId");
-
                     b.HasIndex("SeekerId");
 
                     b.HasIndex("TripId", "SeekerId")
@@ -162,52 +160,6 @@ namespace EcoLift.Data.Migrations
                         .HasDatabaseName("IX_Booking_TripId_SeekerId_Unique");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("EcoLift.Models.Conversation", b =>
-                {
-                    b.Property<int>("ConversationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConversationId"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DriverId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("LastMessageAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PassengerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("TripId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ConversationId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("DriverId");
-
-                    b.HasIndex("LastMessageAt")
-                        .HasDatabaseName("IX_Conversation_LastMessageAt");
-
-                    b.HasIndex("PassengerId");
-
-                    b.HasIndex("TripId", "DriverId", "PassengerId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Conversation_TripId_DriverId_PassengerId_Unique");
-
-                    b.ToTable("Conversations");
                 });
 
             modelBuilder.Entity("EcoLift.Models.Message", b =>
@@ -223,28 +175,32 @@ namespace EcoLift.Data.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<int?>("ConversationId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<string>("SenderId")
+                    b.Property<string>("SenderEmail")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SenderId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("SentAt")
+                    b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("MessageId");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("SentDate")
+                        .HasDatabaseName("IX_Message_SentDate");
 
-                    b.HasIndex("SentAt")
-                        .HasDatabaseName("IX_Message_SentAt");
-
-                    b.HasIndex("ConversationId", "SentAt")
-                        .HasDatabaseName("IX_Message_ConversationId_SentAt");
+                    b.HasIndex("SenderId", "SentDate")
+                        .HasDatabaseName("IX_Message_SenderId_SentDate");
 
                     b.ToTable("Messages");
                 });
@@ -349,9 +305,6 @@ namespace EcoLift.Data.Migrations
                     b.Property<string>("ProviderId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<int?>("VehicleId")
                         .HasColumnType("int");
@@ -555,11 +508,6 @@ namespace EcoLift.Data.Migrations
 
             modelBuilder.Entity("EcoLift.Models.Booking", b =>
                 {
-                    b.HasOne("EcoLift.Models.Conversation", "Conversation")
-                        .WithMany()
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("EcoLift.Models.ApplicationUser", "Seeker")
                         .WithMany("Bookings")
                         .HasForeignKey("SeekerId")
@@ -572,58 +520,17 @@ namespace EcoLift.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Conversation");
-
                     b.Navigation("Seeker");
-
-                    b.Navigation("Trip");
-                });
-
-            modelBuilder.Entity("EcoLift.Models.Conversation", b =>
-                {
-                    b.HasOne("EcoLift.Models.ApplicationUser", null)
-                        .WithMany("AllConversations")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("EcoLift.Models.ApplicationUser", "Driver")
-                        .WithMany("ConversationsAsDriver")
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EcoLift.Models.ApplicationUser", "Passenger")
-                        .WithMany("ConversationsAsPassenger")
-                        .HasForeignKey("PassengerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EcoLift.Models.Trip", "Trip")
-                        .WithMany()
-                        .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Driver");
-
-                    b.Navigation("Passenger");
 
                     b.Navigation("Trip");
                 });
 
             modelBuilder.Entity("EcoLift.Models.Message", b =>
                 {
-                    b.HasOne("EcoLift.Models.Conversation", "Conversation")
-                        .WithMany("Messages")
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("EcoLift.Models.ApplicationUser", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Conversation");
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Sender");
                 });
@@ -645,7 +552,7 @@ namespace EcoLift.Data.Migrations
                     b.HasOne("EcoLift.Models.Trip", "Trip")
                         .WithMany("Reviews")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ReviewedUser");
@@ -737,13 +644,7 @@ namespace EcoLift.Data.Migrations
 
             modelBuilder.Entity("EcoLift.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("AllConversations");
-
                     b.Navigation("Bookings");
-
-                    b.Navigation("ConversationsAsDriver");
-
-                    b.Navigation("ConversationsAsPassenger");
 
                     b.Navigation("Messages");
 
@@ -754,11 +655,6 @@ namespace EcoLift.Data.Migrations
                     b.Navigation("TripsAsProvider");
 
                     b.Navigation("Vehicles");
-                });
-
-            modelBuilder.Entity("EcoLift.Models.Conversation", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("EcoLift.Models.Trip", b =>

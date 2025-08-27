@@ -1,0 +1,667 @@
+@model EcoLift.Models.EditRideViewModel
+@{
+    ViewData["Title"] = "Edit Ride";
+    ViewData["HideFooter"] = true;
+}
+
+<div class="create-ride-page">
+    <!-- Page Header -->
+    @* <div class="page-header">
+        <div class="container">
+            <h1>Edit Ride</h1>
+            <p>Update your journey details</p>
+        </div>
+    </div> *@
+
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+        <div class="container">
+            <div class="step active" data-step="1">
+                <span class="step-number">1</span>
+                <span class="step-title">Route & Time</span>
+            </div>
+            <div class="step" data-step="2">
+                <span class="step-number">2</span>
+                <span class="step-title">Seats & Price</span>
+            </div>
+            <div class="step" data-step="3">
+                <span class="step-number">3</span>
+                <span class="step-title">Preferences</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="container">
+        <div style="padding-block: 24px" >
+            <form method="post" id="editRideForm">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                
+                <!-- Hidden field for TripId -->
+                <input asp-for="TripId" type="hidden" />
+                
+                <!-- Step 1: Trip Details -->
+                <div class="form-step active" id="step1">
+                @*                     <div class="step-header">
+                    <h2>Route & Time</h2>
+                    <p>Where are you picking up and dropping off passengers?</p>
+                </div> *@
+                    
+                    <div class="trip-details-container">
+                        <!-- Left side: Form fields -->
+                        <div class="form-fields">
+                            
+                                <div class="form-group">
+                                    <label asp-for="PickupLocation">Pickup Location</label>
+                                    <input asp-for="PickupLocation" type="text" placeholder="e.g., Munich Central Station" />
+                                    <span asp-validation-for="PickupLocation" class="validation-error"></span>
+                                </div>
+                              
+                      
+                            <div class="form-group">
+                                <label asp-for="DropoffLocation">Dropoff Location</label>
+                                <input asp-for="DropoffLocation" type="text" placeholder="e.g., Nuremberg Airport" />
+                                <span asp-validation-for="DropoffLocation" class="validation-error"></span>
+								</div>
+						
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label asp-for="DepartureDate">Pickup Date</label>
+                                    <input asp-for="DepartureDate" type="date" />
+                                    <span asp-validation-for="DepartureDate" class="validation-error"></span>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label asp-for="DepartureTime">Pickup Time</label>
+                                    <input asp-for="DepartureTime" type="time" />
+                                    <span asp-validation-for="DepartureTime" class="validation-error"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden fields for coordinates (auto-populated by Google Maps) -->
+                            <input asp-for="PickupLatitude" type="hidden" />
+                            <input asp-for="PickupLongitude" type="hidden" />
+                            <input asp-for="DropoffLatitude" type="hidden" />
+                            <input asp-for="DropoffLongitude" type="hidden" />
+                        </div>
+                        
+                        <!-- Right side: Google Maps -->
+                        <div class="map-container" style="position: relative;">
+                            <div id="map" class="google-map" title="Tip: Drag the pin to fine‑tune location"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <div></div>
+                        <button type="button" class="btn-next" onclick="nextStep()">Next: Seats & Price</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Ride Details -->
+                <div class="form-step" id="step2">
+                @*                     <div class="step-header">
+                    <h2>Seats & Price</h2>
+                    <p>How many seats and what's the cost?</p>
+                </div> *@
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="AvailableSeats">Available Seats</label>
+                            <select asp-for="AvailableSeats">
+                                <option value="">Select seats</option>
+                                <option value="1">1 seat</option>
+                                <option value="2">2 seats</option>
+                                <option value="3">3 seats</option>
+                                <option value="4">4 seats</option>
+                            </select>
+                            <span asp-validation-for="AvailableSeats" class="validation-error"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="PricePerSeat">Price per Seat (€)</label>
+                            <input asp-for="PricePerSeat" type="number" placeholder="15.00" min="0" step="0.01" />
+                            <span asp-validation-for="PricePerSeat" class="validation-error"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="VehicleId">Select Your Vehicle</label>
+                        <select asp-for="VehicleId">
+                            <option value="">Choose a vehicle</option>
+                            @if (ViewBag.UserVehicles != null)
+                            {
+                                @foreach (var vehicle in ViewBag.UserVehicles)
+                                {
+                                    <option value="@vehicle.VehicleId">@vehicle.Brand @vehicle.Model - @vehicle.Color (@vehicle.LicensePlate)</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="VehicleId" class="validation-error"></span>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button type="button" class="btn-prev" onclick="prevStep()">Previous</button>
+                        <button type="button" class="btn-next" onclick="nextStep()">Next: Preferences</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Additional Information -->
+                <div class="form-step" id="step3">
+                @*                     <div class="step-header">
+                    <h2>Preferences</h2>
+                    <p>Any preferences or special requirements?</p>
+                </div> *@
+                    
+                    <div class="form-group">
+                        <label asp-for="Notes">Notes (Optional)</label>
+                        <textarea asp-for="Notes" rows="4" placeholder="Any additional information about your ride, pickup points, or preferences..."></textarea>
+                        <span asp-validation-for="Notes" class="validation-error"></span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input asp-for="AllowSmoking" type="checkbox" />
+                                <span>Smoking allowed</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input asp-for="AllowPets" type="checkbox" />
+                                <span>Pets allowed</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button type="button" class="btn-prev" onclick="prevStep()">Previous</button>
+                        <button type="submit" class="btn-submit">Update Ride</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 3;
+let map, directionsService, directionsRenderer;
+let pickupMarker, dropoffMarker;
+let pickupAutocomplete, dropoffAutocomplete;
+let geocoder;
+let activeTarget = 'pickup'; // which input to set on map interactions
+let interactionMode = null; // 'drag' | 'autocomplete' | 'click' | null
+let hasShownDragHint = false;
+let mapDragHintControl = null;
+
+// Initialize Google Maps when the page loads
+function initMap() {
+    // Initialize the map centered on Munich
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: { lat: 48.1351, lng: 11.5820 }, // Munich coordinates
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true, // Remove all default UI controls
+        zoomControl: false, // Remove zoom controls
+        mapTypeControl: false, // Remove map type controls
+        scaleControl: false, // Remove scale control
+        streetViewControl: false, // Remove street view control
+        rotateControl: false, // Remove rotate control
+        fullscreenControl: false, // Remove fullscreen control
+        gestureHandling: 'cooperative', // Better touch handling
+    
+    });
+
+    // Initialize directions service
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true,
+        preserveViewport: true,
+        polylineOptions: {
+            strokeColor: '#4285F4',
+            strokeWeight: 4
+        }
+    });
+    directionsRenderer.setMap(map);
+
+    // Initialize geocoder
+    geocoder = new google.maps.Geocoder();
+
+    // Create a subtle in-map tooltip using Google Maps Controls
+    createDragHintControl();
+
+    // Initialize Google Places Autocomplete for pickup and dropoff inputs
+    const pickupInput = document.getElementById('PickupLocation');
+    const dropoffInput = document.getElementById('DropoffLocation');
+
+    if (pickupInput) {
+        pickupAutocomplete = new google.maps.places.Autocomplete(pickupInput, {
+            fields: ['geometry', 'formatted_address', 'name']
+        });
+        pickupAutocomplete.addListener('place_changed', () => {
+            const place = pickupAutocomplete.getPlace();
+            if (place && place.geometry && place.geometry.location) {
+                const location = place.geometry.location;
+                const addressText = place.formatted_address || place.name || pickupInput.value;
+                interactionMode = 'autocomplete';
+                setPickupFromLatLng(location, addressText);
+                map.panTo(location);
+                map.setZoom(14);
+                updateMap();
+            }
+        });
+    }
+
+    if (dropoffInput) {
+        dropoffAutocomplete = new google.maps.places.Autocomplete(dropoffInput, {
+            fields: ['geometry', 'formatted_address', 'name']
+        });
+        dropoffAutocomplete.addListener('place_changed', () => {
+            const place = dropoffAutocomplete.getPlace();
+            if (place && place.geometry && place.geometry.location) {
+                const location = place.geometry.location;
+                const addressText = place.formatted_address || place.name || dropoffInput.value;
+                interactionMode = 'autocomplete';
+                setDropoffFromLatLng(location, addressText);
+                map.panTo(location);
+                map.setZoom(14);
+                updateMap();
+            }
+        });
+    }
+
+    // Also update map as user types
+    if (pickupInput) pickupInput.addEventListener('input', updateMap);
+    if (dropoffInput) dropoffInput.addEventListener('input', updateMap);
+
+    // Track which input is active for map interactions
+    if (pickupInput) pickupInput.addEventListener('focus', () => { activeTarget = 'pickup'; });
+    if (dropoffInput) dropoffInput.addEventListener('focus', () => { activeTarget = 'dropoff'; });
+
+    // Map click to set or move the active marker
+    map.addListener('click', (e) => {
+        const latLng = e.latLng;
+        interactionMode = 'click';
+        if (activeTarget === 'pickup') {
+            setPickupFromLatLng(latLng);
+        } else {
+            setDropoffFromLatLng(latLng);
+        }
+        reverseGeocodeAndFill(latLng, activeTarget);
+        updateMap();
+    });
+
+    // Show/hide hint on hover over the map canvas
+    const mapCanvas = document.getElementById('map');
+    if (mapCanvas) {
+        mapCanvas.addEventListener('mouseenter', () => showDragHintHover());
+        mapCanvas.addEventListener('mouseleave', () => hideDragHint());
+    }
+
+    // Also use Maps API events to ensure hover works even with overlays
+    map.addListener('mouseover', () => showDragHintHover());
+    map.addListener('mouseout', () => hideDragHint());
+
+    // Set initial markers if coordinates are already set
+    const initMarkers = () => {
+        const pickupLat = parseFloat(document.getElementById('PickupLatitude').value);
+        const pickupLng = parseFloat(document.getElementById('PickupLongitude').value);
+        const dropoffLat = parseFloat(document.getElementById('DropoffLatitude').value);
+        const dropoffLng = parseFloat(document.getElementById('DropoffLongitude').value);
+
+        if (!isNaN(pickupLat) && !isNaN(pickupLng)) {
+            setPickupFromLatLng(new google.maps.LatLng(pickupLat, pickupLng));
+        }
+        if (!isNaN(dropoffLat) && !isNaN(dropoffLng)) {
+            setDropoffFromLatLng(new google.maps.LatLng(dropoffLat, dropoffLng));
+        }
+
+        // Show route between existing locations if both exist
+        if (!isNaN(pickupLat) && !isNaN(pickupLng) && !isNaN(dropoffLat) && !isNaN(dropoffLng)) {
+            const request = {
+                origin: new google.maps.LatLng(pickupLat, pickupLng),
+                destination: new google.maps.LatLng(dropoffLat, dropoffLng),
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, (result, status) => {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                    const bounds = new google.maps.LatLngBounds();
+                    bounds.extend(new google.maps.LatLng(pickupLat, pickupLng));
+                    bounds.extend(new google.maps.LatLng(dropoffLat, dropoffLng));
+                    map.fitBounds(bounds);
+                    
+                    // Ensure our custom markers are visible and positioned correctly
+                    if (pickupMarker) pickupMarker.setMap(map);
+                    if (dropoffMarker) dropoffMarker.setMap(map);
+                }
+            });
+        } else if (!isNaN(pickupLat) && !isNaN(pickupLng)) {
+            map.panTo(new google.maps.LatLng(pickupLat, pickupLng));
+            map.setZoom(14);
+        } else if (!isNaN(dropoffLat) && !isNaN(dropoffLng)) {
+            map.panTo(new google.maps.LatLng(dropoffLat, dropoffLng));
+            map.setZoom(14);
+        }
+    };
+
+    // Try to initialize markers with a delay to ensure form is ready
+    setTimeout(initMarkers, 200);
+}
+
+// Update map when locations change
+function updateMap() {
+    const pickupInput = document.getElementById('PickupLocation');
+    const dropoffInput = document.getElementById('DropoffLocation');
+    const pickupLat = parseFloat(document.getElementById('PickupLatitude').value);
+    const pickupLng = parseFloat(document.getElementById('PickupLongitude').value);
+    const dropoffLat = parseFloat(document.getElementById('DropoffLatitude').value);
+    const dropoffLng = parseFloat(document.getElementById('DropoffLongitude').value);
+
+    const hasPickup = !isNaN(pickupLat) && !isNaN(pickupLng);
+    const hasDropoff = !isNaN(dropoffLat) && !isNaN(dropoffLng);
+
+    if (hasPickup && hasDropoff) {
+        const request = {
+            origin: new google.maps.LatLng(pickupLat, pickupLng),
+            destination: new google.maps.LatLng(dropoffLat, dropoffLng),
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, (result, status) => {
+            if (status === 'OK') {
+                directionsRenderer.setDirections(result);
+                if (interactionMode !== 'drag') {
+                    const bounds = new google.maps.LatLngBounds();
+                    bounds.extend(new google.maps.LatLng(pickupLat, pickupLng));
+                    bounds.extend(new google.maps.LatLng(dropoffLat, dropoffLng));
+                    map.fitBounds(bounds);
+                }
+            }
+        });
+        interactionMode = null;
+        return;
+    }
+
+    // If only one is set, just center to that marker
+    if (interactionMode !== 'drag') {
+        if (hasPickup && pickupMarker) {
+            map.panTo(pickupMarker.getPosition());
+            map.setZoom(14);
+        } else if (hasDropoff && dropoffMarker) {
+            map.panTo(dropoffMarker.getPosition());
+            map.setZoom(14);
+        } else {
+            // As a fallback, if both inputs have text but no lat/lng, try routing by string once
+            const pickupText = pickupInput ? pickupInput.value : '';
+            const dropoffText = dropoffInput ? dropoffInput.value : '';
+            if (pickupText && dropoffText) {
+                const request = {
+                    origin: pickupText,
+                    destination: dropoffText,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+                directionsService.route(request, (result, status) => {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(result);
+                const route = result.routes[0];
+                const pickupPoint = route.legs[0].start_location;
+                const dropoffPoint = route.legs[0].end_location;
+                        setPickupFromLatLng(pickupPoint, pickupText);
+                        setDropoffFromLatLng(dropoffPoint, dropoffText);
+                const bounds = new google.maps.LatLngBounds();
+                bounds.extend(pickupPoint);
+                bounds.extend(dropoffPoint);
+                map.fitBounds(bounds);
+                    }
+                });
+            }
+        }
+    } else {
+        // As a fallback, if both inputs have text but no lat/lng, try routing by string once
+        // If dragging, avoid recentering/zooming
+    }
+    interactionMode = null;
+}
+
+function ensurePickupMarker() {
+    if (!pickupMarker) {
+        pickupMarker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            title: 'Pickup Location',
+            icon: { url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png', scaledSize: new google.maps.Size(32, 32) },
+            animation: google.maps.Animation.DROP
+        });
+        pickupMarker.addListener('dragend', () => {
+            const pos = pickupMarker.getPosition();
+            interactionMode = 'drag';
+            setPickupFromLatLng(pos);
+            reverseGeocodeAndFill(pos, 'pickup');
+            updateMap();
+        });
+        pickupMarker.addListener('dragstart', () => hideDragHint());
+    }
+}
+
+function ensureDropoffMarker() {
+    if (!dropoffMarker) {
+        dropoffMarker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            title: 'Dropoff Location',
+            icon: { url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', scaledSize: new google.maps.Size(32, 32) },
+            animation: google.maps.Animation.DROP
+        });
+        dropoffMarker.addListener('dragend', () => {
+            const pos = dropoffMarker.getPosition();
+            interactionMode = 'drag';
+            setDropoffFromLatLng(pos);
+            reverseGeocodeAndFill(pos, 'dropoff');
+            updateMap();
+        });
+        dropoffMarker.addListener('dragstart', () => hideDragHint());
+    }
+}
+
+function setPickupFromLatLng(latLng, addressText) {
+    ensurePickupMarker();
+    pickupMarker.setPosition(latLng);
+    // brief bounce to hint that the pin is draggable
+    if (pickupMarker.getAnimation() === null || pickupMarker.getAnimation() === undefined) {
+        pickupMarker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(() => pickupMarker.setAnimation(null), 700);
+    }
+    document.getElementById('PickupLatitude').value = latLng.lat();
+    document.getElementById('PickupLongitude').value = latLng.lng();
+    if (addressText) {
+        const input = document.getElementById('PickupLocation');
+        if (input) input.value = addressText;
+    }
+    showDragHintOnce();
+}
+
+function setDropoffFromLatLng(latLng, addressText) {
+    ensureDropoffMarker();
+    dropoffMarker.setPosition(latLng);
+    // brief bounce to hint that the pin is draggable
+    if (dropoffMarker.getAnimation() === null || dropoffMarker.getAnimation() === undefined) {
+        dropoffMarker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(() => dropoffMarker.setAnimation(null), 700);
+    }
+    document.getElementById('DropoffLatitude').value = latLng.lat();
+    document.getElementById('DropoffLongitude').value = latLng.lng();
+    if (addressText) {
+        const input = document.getElementById('DropoffLocation');
+        if (input) input.value = addressText;
+    }
+    showDragHintOnce();
+}
+
+function reverseGeocodeAndFill(latLng, target) {
+    if (!geocoder) return;
+    geocoder.geocode({ location: latLng }, (results, status) => {
+        if (status === 'OK' && results && results[0]) {
+            const address = results[0].formatted_address;
+            if (target === 'pickup') {
+                const input = document.getElementById('PickupLocation');
+                if (input) input.value = address;
+            } else {
+                const input = document.getElementById('DropoffLocation');
+                if (input) input.value = address;
+            }
+        }
+    });
+}
+
+function createDragHintControl() {
+    const hintDiv = document.createElement('div');
+    hintDiv.style.background = 'rgba(0,0,0,0.65)';
+    hintDiv.style.color = '#fff';
+    hintDiv.style.padding = '6px 10px';
+    hintDiv.style.borderRadius = '6px';
+    hintDiv.style.fontSize = '12px';
+    hintDiv.style.pointerEvents = 'none';
+    hintDiv.style.transition = 'opacity 200ms ease';
+    hintDiv.style.opacity = '0';
+    hintDiv.style.display = 'none';
+    hintDiv.textContent = 'Tip: Drag the pin to fine‑tune location';
+
+    hintDiv.style.margin = '8px';
+    hintDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(hintDiv);
+    mapDragHintControl = hintDiv;
+}
+
+function showDragHintOnce() {
+    if (hasShownDragHint) return;
+    hasShownDragHint = true;
+    if (!mapDragHintControl) return;
+    mapDragHintControl.style.display = 'block';
+    mapDragHintControl.style.opacity = '0';
+    setTimeout(() => { mapDragHintControl.style.opacity = '1'; }, 10);
+    setTimeout(() => hideDragHint(), 3000);
+}
+
+function hideDragHint() {
+    if (!mapDragHintControl) return;
+    mapDragHintControl.style.opacity = '0';
+    setTimeout(() => { if (mapDragHintControl) mapDragHintControl.style.display = 'none'; }, 200);
+}
+
+function showDragHintHover() {
+    if (!mapDragHintControl) return;
+    mapDragHintControl.style.display = 'block';
+    mapDragHintControl.style.opacity = '1';
+}
+
+function nextStep() {
+    if (currentStep < totalSteps) {
+        // Validate current step before proceeding
+        if (validateCurrentStep()) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgressSteps();
+        }
+    }
+}
+
+function validateCurrentStep() {
+    let isValid = true;
+    const currentStepElement = document.getElementById(`step${currentStep}`);
+    
+    // Clear previous validation errors
+    currentStepElement.querySelectorAll('.validation-error').forEach(error => {
+        error.textContent = '';
+    });
+    
+    // Validate based on current step
+    switch (currentStep) {
+        case 1:
+            // Validate Trip Details
+            const pickupLocation = document.getElementById('PickupLocation').value.trim();
+            const dropoffLocation = document.getElementById('DropoffLocation').value.trim();
+            const departureDate = document.getElementById('DepartureDate').value;
+            const departureTime = document.getElementById('DepartureTime').value;
+            
+            if (!pickupLocation) {
+                showValidationError('PickupLocation', 'Pickup location is required');
+                isValid = false;
+            }
+            if (!dropoffLocation) {
+                showValidationError('DropoffLocation', 'Dropoff location is required');
+                isValid = false;
+            }
+            if (!departureDate) {
+                showValidationError('DepartureDate', 'Departure date is required');
+                isValid = false;
+            }
+            if (!departureTime) {
+                showValidationError('DepartureTime', 'Departure time is required');
+                isValid = false;
+            }
+            break;
+            
+        case 2:
+            // Validate Ride Details
+            const availableSeats = document.getElementById('AvailableSeats').value;
+            const pricePerSeat = document.getElementById('PricePerSeat').value;
+            const vehicleId = document.getElementById('VehicleId').value;
+            
+            if (!availableSeats) {
+                showValidationError('AvailableSeats', 'Please select available seats');
+                isValid = false;
+            }
+            if (!pricePerSeat || parseFloat(pricePerSeat) <= 0) {
+                showValidationError('PricePerSeat', 'Please enter a valid price per seat');
+                isValid = false;
+            }
+            if (!vehicleId) {
+                showValidationError('VehicleId', 'Please select a vehicle');
+                isValid = false;
+            }
+            break;
+    }
+    
+    return isValid;
+}
+
+function showValidationError(fieldName, message) {
+    const field = document.getElementById(fieldName);
+    if (field) {
+        const errorSpan = field.parentNode.querySelector('.validation-error');
+        if (errorSpan) {
+            errorSpan.textContent = message;
+        }
+    }
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        currentStep--;
+        document.getElementById(`step${currentStep}`).classList.add('active');
+        updateProgressSteps();
+    }
+}
+
+function updateProgressSteps() {
+    document.querySelectorAll('.step').forEach((step, index) => {
+        if (index + 1 <= currentStep) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
+// Initialize map when page loads
+window.addEventListener('load', initMap);
+</script>
+
+<!-- Google Maps JavaScript API -->
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtcU9ln2mFTbWZHXpwJZCe7x9qc4MnH64&libraries=places&callback=initMap">
+</script>

@@ -9,6 +9,84 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EcoLift.styles.css" asp-append-version="true" />
+    
+    <style>
+        /* TempData Notification System */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        }
+
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out;
+            background: white;
+            border-left: 4px solid;
+        }
+
+        .success-notification {
+            border-left-color: #28a745;
+            color: #155724;
+            background-color: #d4edda;
+        }
+
+        .error-notification {
+            border-left-color: #dc3545;
+            color: #721c24;
+            background-color: #f8d7da;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 5px;
+            margin-left: auto;
+        }
+
+        .notification-close:hover {
+            opacity: 0.7;
+        }
+
+        @@keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes fadeOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .notification.fade-out {
+            animation: fadeOut 0.3s ease-in forwards;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -27,7 +105,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">About</a>
-                        </li>
+                        </li>   
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">How It Works</a>
                         </li>
@@ -43,6 +121,26 @@
     </header>
     <div>
         <main role="main">
+            <!-- TempData Notification Container -->
+            <div id="notification-container" class="notification-container">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="notification success-notification">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span>@TempData["SuccessMessage"]</span>
+                        <button type="button" class="notification-close" onclick="this.parentElement.remove();">×</button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="notification error-notification">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span>@TempData["ErrorMessage"]</span>
+                        <button type="button" class="notification-close" onclick="this.parentElement.remove();">×</button>
+                    </div>
+                }
+            </div>
+            
             @RenderBody()
         </main>
     </div>
@@ -51,6 +149,35 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        // TempData Notification System
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifications = document.querySelectorAll('.notification');
+            
+            notifications.forEach(function(notification) {
+                // Auto-hide after 5 seconds
+                setTimeout(function() {
+                    notification.classList.add('fade-out');
+                    setTimeout(function() {
+                        notification.remove();
+                    }, 300);
+                }, 5000);
+
+                // Close button handler
+                const closeButton = notification.querySelector('.notification-close');
+                if (closeButton) {
+                    closeButton.addEventListener('click', function() {
+                        notification.classList.add('fade-out');
+                        setTimeout(function() {
+                            notification.remove();
+                        }, 300);
+                    });
+                }
+            });
+        });
+    </script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

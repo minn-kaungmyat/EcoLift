@@ -1,0 +1,117 @@
+@model EcoLift.Models.CreateMessageViewModel
+@{
+    ViewData["Title"] = "Message Driver";
+    ViewData["HideFooter"] = true;
+}
+
+<div class="message-page">
+    <div class="container">
+        <div class="message-container">
+            <div class="trip-summary-card">
+                <div class="trip-header">
+                    <h2 class="trip-title">Message Driver</h2>
+                    <div class="trip-route">
+                        <div class="route-point pickup">
+                            <i class="fas fa-circle"></i>
+                            <span>@Model.Trip?.PickupLocation</span>
+                        </div>
+                        <div class="route-line">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="route-point dropoff">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>@Model.Trip?.DropoffLocation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-details">
+                    <div class="detail-row">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>@Model.Trip?.DepartureDate.ToString("MMM dd, yyyy")</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span>@(Model.Trip?.DepartureTime.ToString(@"hh\:mm"))</span>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-item">
+                            <i class="fas fa-user"></i>
+                            <span>@Model.Trip?.Provider.FirstName @Model.Trip?.Provider.LastName</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-form-card">
+                <form method="post" class="message-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="TripId" />
+
+                    @if (Model.IsGuest)
+                    {
+                        <div class="form-group">
+                            <label asp-for="SenderEmail" class="form-label">Your email</label>
+                            <input asp-for="SenderEmail" class="form-control" placeholder="your@email.com" />
+                            <span asp-validation-for="SenderEmail" class="text-danger"></span>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label asp-for="Subject" class="form-label">Subject</label>
+                        <input asp-for="Subject" class="form-control" />
+                        <span asp-validation-for="Subject" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Content" class="form-label">Message</label>
+                        <textarea asp-for="Content" class="form-control" rows="6" placeholder="Hi! Is there room for a small suitcase?"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+
+                    <div class="message-actions">
+                        <button type="submit" class="btn-send">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                        <a href="@Url.Action("Search", "Home")" class="btn-cancel">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.message-page { background: #f8f9fa; min-height: 100vh; padding: 2rem 0; }
+.message-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; }
+.trip-summary-card, .message-form-card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.trip-header { text-align: center; margin-bottom: 1rem; }
+.trip-title { font-size: 1.5rem; font-weight: 600; color: var(--secondary-color); margin-bottom: 1rem; }
+.trip-route { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+.route-point { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--secondary-color); }
+.route-point.pickup i { color: var(--success-color); font-size: 0.75rem; }
+.route-point.dropoff i { color: var(--primary-color); font-size: 1rem; }
+.route-line { color: #9ca3af; }
+.trip-details { border-top: 1px solid #e9ecef; padding-top: 1rem; }
+.detail-row { display: flex; justify-content: space-between; margin-bottom: 0.75rem; }
+.detail-item { display: flex; align-items: center; gap: 0.5rem; color: #6b7280; font-size: 0.875rem; }
+.detail-item i { color: #9ca3af; width: 16px; text-align: center; }
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+.form-label { font-weight: 500; color: var(--secondary-color); font-size: 0.9rem; }
+.form-control { padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; font-size: 1rem; background: white; }
+.form-control:focus { outline: none; border-color: var(--primary-color); }
+.message-actions { display: flex; gap: 1rem; }
+.btn-send { background: var(--primary-color); color: white; padding: 0.875rem 2rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s ease; }
+.btn-send:hover { background: var(--primary-hover); }
+.btn-cancel { background: white; color: #6b7280; padding: 0.875rem 2rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; text-decoration: none; }
+.btn-cancel:hover { background: #f8f9fa; border-color: #9ca3af; text-decoration: none; }
+
+/* Responsive */
+@@media (max-width: 768px) { .message-container { padding: 0 1rem; } .message-actions { flex-direction: column; } .btn-send, .btn-cancel { justify-content: center; } }
+</style>

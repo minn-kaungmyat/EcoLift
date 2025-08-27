@@ -6,7 +6,7 @@
 <div class="navbar-nav navbar-actions">
     <!-- Search Button -->
     <div class="nav-item me-3">
-        <a href="#" class="btn btn-outline-primary btn-sm search-btn" title="Search Rides">
+        <a asp-controller="Home" asp-action="Search" class="btn btn-outline-primary btn-sm search-btn" title="Search Rides">
             <i class="fas fa-search me-1"></i>
             Search
         </a>
@@ -14,7 +14,7 @@
 
     <!-- Create Ride Button -->
     <div class="nav-item me-3">
-        <a href="#" class="btn btn-primary btn-sm create-ride-btn" title="Create a Ride">
+        <a asp-area="" asp-controller="Ride" asp-action="Create" class="btn btn-primary btn-sm create-ride-btn" title="Create a Ride">
             <i class="fas fa-plus me-1"></i>
             Create Ride
         </a>
@@ -30,18 +30,18 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu">
                 <li>
-                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                    <a class="dropdown-item" asp-controller="Profile" asp-action="Index">
                         <i class="fas fa-user me-2"></i>Profile
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-history me-2"></i>My Rides
+                    <a class="dropdown-item" asp-controller="Message" asp-action="Inbox">
+                        <i class="fas fa-inbox me-2"></i>Inbox
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-bookmark me-2"></i>Bookings
+                    <a class="dropdown-item" asp-controller="Ride" asp-action="Index">
+                        <i class="fas fa-history me-2"></i>My Rides & Bookings
                     </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>

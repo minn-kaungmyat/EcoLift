@@ -1,0 +1,321 @@
+@model EcoLift.Models.ViewModels.EditVehicleViewModel
+@{
+    ViewData["Title"] = "Edit Vehicle";
+        ViewData["HideFooter"] = true;
+}
+
+<div class="edit-vehicle-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="vehicle-form-card">
+                    <div class="form-header">
+                        <div class="header-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h2>Edit Vehicle</h2>
+                        <p>Update your vehicle information</p>
+                    </div>
+
+                    <form asp-action="EditVehicle" asp-route-id="@Model.VehicleId" method="post">
+                        <input asp-for="VehicleId" type="hidden" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Brand" class="form-label">
+                                        <i class="fas fa-industry me-1"></i>Brand
+                                    </label>
+                                    <input asp-for="Brand" class="form-control" placeholder="e.g., BMW, Mercedes, Toyota" 
+                                           list="car-brands" autocomplete="off" />
+                                    <datalist id="car-brands">
+                                        <option value="BMW"></option>
+                                        <option value="Mercedes-Benz"></option>
+                                        <option value="Audi"></option>
+                                        <option value="Toyota"></option>
+                                        <option value="Honda"></option>
+                                        <option value="Volkswagen"></option>
+                                        <option value="Ford"></option>
+                                        <option value="Nissan"></option>
+                                        <option value="Honda"></option>
+                                        <option value="Kia"></option>
+                                        <option value="Mazda"></option>
+                                        <option value="Subaru"></option>
+                                        <option value="Volvo"></option>
+                                        <option value="Peugeot"></option>
+                                        <option value="Renault"></option>
+                                        <option value="Citroën"></option>
+                                        <option value="SEAT"></option>
+                                        <option value="Škoda"></option>
+                                        <option value="Opel"></option>
+                                        <option value="Fiat"></option>
+                                    </datalist>
+                                    <span asp-validation-for="Brand" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Model" class="form-label">
+                                        <i class="fas fa-car me-1"></i>Model
+                                    </label>
+                                    <input asp-for="Model" class="form-control" placeholder="e.g., 3 Series, C-Class, Corolla" />
+                                    <span asp-validation-for="Model" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Color" class="form-label">
+                                        <i class="fas fa-palette me-1"></i>Color
+                                    </label>
+                                    <input asp-for="Color" class="form-control" placeholder="e.g., Black, White, Red" 
+                                           list="car-colors" autocomplete="off" />
+                                    <datalist id="car-colors">
+                                        <option value="Black"></option>
+                                        <option value="White"></option>
+                                        <option value="Silver"></option>
+                                        <option value="Gray"></option>
+                                        <option value="Red"></option>
+                                        <option value="Blue"></option>
+                                        <option value="Green"></option>
+                                        <option value="Yellow"></option>
+                                        <option value="Orange"></option>
+                                        <option value="Purple"></option>
+                                        <option value="Brown"></option>
+                                        <option value="Gold"></option>
+                                        <option value="Beige"></option>
+                                        <option value="Maroon"></option>
+                                        <option value="Navy"></option>
+                                    </datalist>
+                                    <span asp-validation-for="Color" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="LicensePlate" class="form-label">
+                                        <i class="fas fa-id-card me-1"></i>License Plate
+                                    </label>
+                                    <input asp-for="LicensePlate" class="form-control license-plate" 
+                                           placeholder="e.g., ABC-123" maxlength="20" />
+                                    <span asp-validation-for="LicensePlate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                                                                <label asp-for="LicensePlate" class="form-label">
+                                        <i class="fas fa-id-card me-1"></i>License Plate
+                                    </label>
+                                    <input asp-for="LicensePlate" class="form-control license-plate" 
+                                           placeholder="e.g., ABC-123" maxlength="20" />
+                                    <span asp-validation-for="LicensePlate" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Your license plate helps passengers identify your vehicle
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.edit-vehicle-page {
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.vehicle-form-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #f1f3f4;
+}
+
+.header-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+}
+
+.form-header h2 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.form-header p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.form-label i {
+    color: #28a745;
+    width: 20px;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fafbfc;
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.25rem rgba(40,167,69,0.15);
+    background-color: white;
+    transform: translateY(-1px);
+}
+
+.form-control:hover {
+    border-color: #28a745;
+    background-color: white;
+}
+
+.license-plate {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.form-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-text i {
+    color: #28a745;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #f1f3f4;
+}
+
+.btn {
+    padding: 1rem 2.5rem;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    min-width: 150px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border: none;
+    box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    background: transparent;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(108,117,125,0.3);
+}
+
+@@media (max-width: 768px) {
+    .edit-vehicle-page {
+        padding: 1rem 0;
+    }
+    
+    .vehicle-form-card {
+        padding: 2rem;
+        margin: 0 1rem;
+    }
+    
+    .header-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+        min-width: auto;
+    }
+}
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Auto-format license plate input
+        document.querySelector('.license-plate').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+    </script>
+}

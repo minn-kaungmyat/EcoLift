@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+
+
 @* Hero Section *@
 <section id="hero" style="height: 600px; position: relative;">
     <img class="hero-img" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/78e9b83c14-e008534c50e2fbfa6a57.png" alt="scenic mountain road with cars in Munich, aerial view, high quality, cinematic">
@@ -8,48 +11,52 @@
     <div class="container" style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100%;padding-inline: 1rem; position: relative">
         <h1 class="hero-title text-white" >Commute Smarter, Save the Environment</h1>
         <p class="text-xl text-white text-center mb-10">Find trusted carpooling partners for your daily commute in Munich</p>
-        <div id="search-widget" class="search-widget">
+        <form method="get" action="@Url.Action("Search", "Home")" id="search-widget" class="search-widget">
             <div class="search-grid">
                 <div class="search-field">
                     <label class="search-label">Leaving from</label>
                     <div class="search-input-wrapper">
                         <i class="fas fa-map-marker-alt search-icon"></i>
-                        <input type="text" placeholder="City or address" class="search-input">
+                        <input type="text" name="FromLocation" placeholder="City or address" class="search-input" id="homeFromLocation">
+                        <input type="hidden" name="FromLatitude" id="homeFromLatitude">
+                        <input type="hidden" name="FromLongitude" id="homeFromLongitude">
                     </div>
                 </div>
                 <div class="search-field">
                     <label class="search-label">Going to</label>
                     <div class="search-input-wrapper">
                         <i class="fas fa-map-marker-alt search-icon"></i>
-                        <input type="text" placeholder="City or address" class="search-input">
+                        <input type="text" name="ToLocation" placeholder="City or address" class="search-input" id="homeToLocation">
+                        <input type="hidden" name="ToLatitude" id="homeToLatitude">
+                        <input type="hidden" name="ToLongitude" id="homeToLongitude">
                     </div>
                 </div>
                 <div class="search-field">
                     <label class="search-label">When</label>
                     <div class="search-input-wrapper">
                         <i class="far fa-calendar search-icon"></i>
-                        <input type="date" class="search-input">
+                        <input type="date" name="DepartureDate" class="search-input">
                     </div>
                 </div>
-                <div class="search-field">
-                    <label class="search-label">Passengers</label>
-                    <div class="search-input-wrapper">
-                        <i class="fas fa-users search-icon"></i>
-                        <select class="search-input search-select">
-                            <option value="1">1 passenger</option>
-                            <option value="2">2 passengers</option>
-                            <option value="3">3 passengers</option>
-                            <option value="4">4 passengers</option>
-                        </select>
-                        <i class="fas fa-chevron-down search-icon-right"></i>
-                    </div>
-                </div>
+                                        <div class="search-field">
+                            <label class="search-label">Passengers</label>
+                            <div class="search-input-wrapper">
+                                <i class="fas fa-users search-icon"></i>
+                                <select name="Passengers" class="search-input search-select">
+                                    <option value="1" selected>1 passenger</option>
+                                    <option value="2">2 passengers</option>
+                                    <option value="3">3 passengers</option>
+                                    <option value="4">4 passengers</option>
+                                </select>
+                                <i class="fas fa-chevron-down search-icon-right"></i>
+                            </div>
+                        </div>
             </div>
-                           <button class="search-button-new">
-                  <i class="fas fa-search search-button-icon"></i>
-                  Find a ride
-              </button>
-        </div>
+            <button type="submit" class="search-button-new">
+                <i class="fas fa-search search-button-icon"></i>
+                Find a ride
+            </button>
+        </form>
     </div>
 </section>
 
@@ -72,7 +79,7 @@
                 </div>
                 <h3 class="feature-title">Find a ride</h3>
                 <p class="feature-description">Search for available rides based on your route, date, and time preferences.</p>
-                <span class="feature-link">Search now</span>
+                <a asp-controller="Home" asp-action="Search" class="feature-link">Search now</a>
             </div>
 
             <div class="feature-card">
@@ -81,8 +88,8 @@
                 </div>
                 <h3 class="feature-title">Offer a ride</h3>
                 <p class="feature-description">Share your journey with others heading in the same direction and split costs.</p>
-                <span class="feature-link">Offer now</span>
-                </div>
+                <a href="@Url.Action("Create", "Ride")" class="feature-link">Offer now</a>
+            </div>
 
             <div class="feature-card">
                 <div class="feature-icon-container">
@@ -202,8 +209,59 @@
         <h2 class="cta-title">Ready to start carpooling?</h2>
         <p class="cta-description">Join thousands of Munich residents already saving money and reducing their carbon footprint.</p>
         <div class="cta-buttons">
-            <button class="cta-button-primary">Find a ride</button>
-            <button class="cta-button-secondary">Offer a ride</button>
+            <a asp-controller="Home" asp-action="Search" class="cta-button-primary">Find a ride</a>
+            <a asp-controller="Ride" asp-action="Create" class="cta-button-secondary">Offer a ride</a>
         </div>
+       
     </div>
 </section>
+
+<script>
+// Initialize Google Places Autocomplete for home page search fields
+function initHomeAutocomplete() {
+    const fromInput = document.getElementById('homeFromLocation');
+    const toInput = document.getElementById('homeToLocation');
+    const fromLatInput = document.getElementById('homeFromLatitude');
+    const fromLngInput = document.getElementById('homeFromLongitude');
+    const toLatInput = document.getElementById('homeToLatitude');
+    const toLngInput = document.getElementById('homeToLongitude');
+
+    if (fromInput) {
+        const fromAutocomplete = new google.maps.places.Autocomplete(fromInput, {
+            fields: ['formatted_address', 'geometry', 'name']
+        });
+        
+        fromAutocomplete.addListener('place_changed', function() {
+            const place = fromAutocomplete.getPlace();
+            if (place.geometry && place.geometry.location) {
+                fromLatInput.value = place.geometry.location.lat();
+                fromLngInput.value = place.geometry.location.lng();
+                console.log('Home From coordinates:', place.geometry.location.lat(), place.geometry.location.lng());
+            }
+        });
+    }
+
+    if (toInput) {
+        const toAutocomplete = new google.maps.places.Autocomplete(toInput, {
+            fields: ['formatted_address', 'geometry', 'name']
+        });
+        
+        toAutocomplete.addListener('place_changed', function() {
+            const place = toAutocomplete.getPlace();
+            if (place.geometry && place.geometry.location) {
+                toLatInput.value = place.geometry.location.lat();
+                toLngInput.value = place.geometry.location.lng();
+                console.log('Home To coordinates:', place.geometry.location.lat(), place.geometry.location.lng());
+            }
+        });
+    }
+}
+
+// Initialize autocomplete when page loads
+window.addEventListener('load', initHomeAutocomplete);
+</script>
+
+<!-- Google Maps JavaScript API for Places Autocomplete -->
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtcU9ln2mFTbWZHXpwJZCe7x9qc4MnH64&libraries=places&callback=initHomeAutocomplete">
+</script>

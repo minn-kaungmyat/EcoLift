@@ -13,38 +13,48 @@ namespace EcoLift.Models
         [ForeignKey("Provider")]
         public string ProviderId { get; set; } = string.Empty;
         
-        // Departure location fields (inline)
+        // Pickup location fields
         [Required]
-        [StringLength(100)]
-        public string DepartureCity { get; set; } = string.Empty;
+        [StringLength(500)]
+        [Display(Name = "Pickup Location")]
+        public string PickupLocation { get; set; } = string.Empty;
         
-        [Required]
         [Column(TypeName = "decimal(9,6)")]
-        public decimal DepartureLatitude { get; set; }
+        [Range(-90, 90, ErrorMessage = "Latitude must be between -90 and 90")]
+        [Display(Name = "Pickup Latitude")]
+        public decimal? PickupLatitude { get; set; }
         
-        [Required]
         [Column(TypeName = "decimal(9,6)")]
-        public decimal DepartureLongitude { get; set; }
+        [Range(-180, 180, ErrorMessage = "Longitude must be between -180 and 180")]
+        [Display(Name = "Pickup Longitude")]
+        public decimal? PickupLongitude { get; set; }
         
-        // Destination location fields (inline)
+        // Dropoff location fields
         [Required]
-        [StringLength(100)]
-        public string DestinationCity { get; set; } = string.Empty;
+        [StringLength(500)]
+        [Display(Name = "Dropoff Location")]
+        public string DropoffLocation { get; set; } = string.Empty;
         
-        [Required]
         [Column(TypeName = "decimal(9,6)")]
-        public decimal DestinationLatitude { get; set; }
+        [Range(-90, 90, ErrorMessage = "Latitude must be between -90 and 90")]
+        [Display(Name = "Dropoff Latitude")]
+        public decimal? DropoffLatitude { get; set; }
         
-        [Required]
         [Column(TypeName = "decimal(9,6)")]
-        public decimal DestinationLongitude { get; set; }
+        [Range(-180, 180, ErrorMessage = "Longitude must be between -180 and 180")]
+        [Display(Name = "Dropoff Longitude")]
+        public decimal? DropoffLongitude { get; set; }
         
         // Trip timing
         [Required]
-        public DateTime DepartureTime { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "Departure Date")]
+        public DateTime DepartureDate { get; set; }
         
         [Required]
-        public DateTime ArrivalTime { get; set; }
+        [DataType(DataType.Time)]
+        [Display(Name = "Departure Time")]
+        public TimeSpan DepartureTime { get; set; }
         
         // Trip details
         [Required]
@@ -59,7 +69,21 @@ namespace EcoLift.Models
         [ForeignKey("Vehicle")]
         public int? VehicleId { get; set; }
         
+        [StringLength(500)]
+        [Display(Name = "Notes")]
+        public string? Notes { get; set; }
+        
+        [Display(Name = "Allow Smoking")]
+        public bool AllowSmoking { get; set; }
+        
+        [Display(Name = "Allow Pets")]
+        public bool AllowPets { get; set; }
+        
         public bool IsActive { get; set; } = true;
+        
+        [Required]
+        [Display(Name = "Trip Status")]
+        public TripStatus Status { get; set; } = TripStatus.Published;
         
         // Navigation properties
         public virtual ApplicationUser Provider { get; set; } = null!;
@@ -71,6 +95,13 @@ namespace EcoLift.Models
         public int BookedSeats => Bookings.Where(b => b.Status == BookingStatus.Confirmed).Sum(b => b.SeatsBooked);
         public int RemainingSeats => AvailableSeats - BookedSeats;
         public bool HasAvailableSeats => RemainingSeats > 0;
-        public TimeSpan Duration => ArrivalTime - DepartureTime;
+        public DateTime DepartureDateTime => DepartureDate.Date.Add(DepartureTime);
+        
+        // Status-based computed properties
+        public bool IsOpenForBookings => Status == TripStatus.Published || Status == TripStatus.PartiallyBooked;
+        public bool IsFullyBooked => Status == TripStatus.Full;
+        public bool IsCompleted => Status == TripStatus.Completed;
+        public bool IsCancelled => Status == TripStatus.Cancelled;
+        public bool IsOngoing => Status == TripStatus.Ongoing;
     }
 }

@@ -5,25 +5,27 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="login-container">
-    <div class="login-card">
-        <form id="account" method="post" class="login-form">
+<div class="form-container">
+    <div class="form-card">
+       
+        
+        <form id="account" method="post" class="form">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
             
-            <div class="form-group">
+            <div>
                 <label asp-for="Input.Email" class="form-label">Email Address</label>
                 <div class="input-wrapper">
                     <i class="fas fa-envelope input-icon"></i>
-                    <input asp-for="Input.Email" class="form-input" autocomplete="username" aria-required="true" placeholder="Enter your email" />
+                    <input asp-for="Input.Email" class="form-input" autocomplete="username" aria-required="true" placeholder="Enter your email" style="padding: 0.875rem 1rem 0.875rem 2.75rem" />
                 </div>
                 <span asp-validation-for="Input.Email" class="validation-error"></span>
             </div>
 
-            <div class="form-group">
+            <div>
                 <label asp-for="Input.Password" class="form-label">Password</label>
                 <div class="input-wrapper">
                     <i class="fas fa-lock input-icon"></i>
-                    <input asp-for="Input.Password" class="form-input" autocomplete="current-password" aria-required="true" placeholder="Enter your password" />
+                    <input asp-for="Input.Password" class="form-input" autocomplete="current-password" aria-required="true" placeholder="Enter your password" style="padding: 0.875rem 1rem 0.875rem 2.75rem" />
                 </div>
                 <span asp-validation-for="Input.Password" class="validation-error"></span>
             </div>
@@ -37,24 +39,20 @@
                 <a id="forgot-password" asp-page="./ForgotPassword" class="forgot-link">Forgot password?</a>
             </div>
 
-            <button id="login-submit" type="submit" class="login-button">
+            <button id="login-submit" type="submit" class="form-button">
                 <span>Sign In</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
 
-            <div class="login-divider">
+            <div class="form-divider">
                 <span>New to EcoLift?</span>
             </div>
 
-            <div class="login-links">
-                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="register-link">
+            <div class="form-links">
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="form-link primary">
                     <i class="fas fa-user-plus"></i>
                     Create Account
                 </a>
-                @* <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="resend-link">
-                    <i class="fas fa-envelope"></i>
-                    Resend Confirmation
-                </a> *@
             </div>
         </form>
     </div>

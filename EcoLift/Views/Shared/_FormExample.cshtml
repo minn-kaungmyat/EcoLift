@@ -1,0 +1,122 @@
+@* 
+    Example form component using the new reusable form classes.
+    This demonstrates how to create consistent forms across your project.
+    
+    Usage:
+    - Copy this structure and modify the form fields as needed
+    - Use the CSS classes: form-container, form-card, form-header, form, form-group, form-label, form-input, form-button, etc.
+    - The styling will automatically be consistent with your login/register forms
+*@
+
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="form-logo">
+                <i class="fas fa-edit"></i>
+            </div>
+            <h1 class="form-title">Form Title</h1>
+            <p class="form-subtitle">Form description or instructions</p>
+        </div>
+        
+        <form method="post" class="form">
+            <!-- Example form group with input -->
+            <div class="form-group">
+                <label class="form-label">Field Label</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" class="form-input" placeholder="Enter value" />
+                </div>
+            </div>
+            
+            <!-- Example form group with textarea -->
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-align-left input-icon"></i>
+                    <textarea class="form-input" rows="3" placeholder="Enter description"></textarea>
+                </div>
+            </div>
+            
+            <!-- Example form group with select -->
+            <div class="form-group">
+                <label class="form-label">Category</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-list input-icon"></i>
+                    <select class="form-input">
+                        <option value="">Select category</option>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Example form group with checkbox -->
+            <div class="form-group">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="form-checkbox" />
+                    <span class="checkmark"></span>
+                    <span class="checkbox-label">Accept terms and conditions</span>
+                </label>
+            </div>
+            
+            <!-- Submit button -->
+            <button type="submit" class="form-button">
+                <span>Submit</span>
+                <i class="fas fa-check"></i>
+            </button>
+            
+            <!-- Optional divider and links -->
+            <div class="form-divider">
+                <span>Additional options</span>
+            </div>
+            
+            <div class="form-links">
+                <a href="#" class="form-link primary">
+                    <i class="fas fa-plus"></i>
+                    Add Another
+                </a>
+                <a href="#" class="form-link secondary">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@* 
+    CSS Classes Reference:
+    
+    Container & Layout:
+    - form-container: Full-height container with centered content
+    - form-card: White card with shadow and rounded corners
+    - form-header: Header section with logo, title, and subtitle
+    - form: Form element with consistent spacing
+    
+    Form Elements:
+    - form-group: Wrapper for label + input combination
+    - form-label: Styled label text
+    - input-wrapper: Container for input with icon positioning
+    - input-icon: Icon positioned inside input field
+    - form-input: Styled input field (works with input, textarea, select)
+    
+    Interactive Elements:
+    - form-button: Primary action button
+    - form-checkbox: Hidden checkbox with custom styling
+    - checkmark: Custom checkbox appearance
+    - checkbox-wrapper: Container for checkbox + label
+    
+    Layout Elements:
+    - form-divider: Horizontal line with centered text
+    - form-links: Container for secondary action links
+    - form-link: Styled link (use .primary or .secondary modifiers)
+    
+    Utility Classes:
+    - validation-error: Error message styling
+    - forgot-link: Special link styling for password recovery
+    
+    Modifiers:
+    - .form-link.primary: Primary action link (filled background)
+    - .form-link.secondary: Secondary action link (outlined)
+    - .form-input.error: Error state for input fields
+*@

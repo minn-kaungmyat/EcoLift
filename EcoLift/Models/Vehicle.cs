@@ -14,19 +14,23 @@ namespace EcoLift.Models
         
         [Required]
         [StringLength(50)]
-        public string Make { get; set; } = string.Empty;
+        [Display(Name = "Brand")]
+        public string Brand { get; set; } = string.Empty;
         
         [Required]
         [StringLength(50)]
+        [Display(Name = "Model")]
         public string Model { get; set; } = string.Empty;
         
         [Required]
-        [StringLength(50)]
-        public string RegistrationNumber { get; set; } = string.Empty;
+        [StringLength(20)]
+        [Display(Name = "License Plate")]
+        public string LicensePlate { get; set; } = string.Empty;
         
         [Required]
-        [Range(1, 20)]
-        public int Capacity { get; set; }
+        [StringLength(30)]
+        [Display(Name = "Color")]
+        public string Color { get; set; } = string.Empty;
         
         // Navigation properties
         public virtual ApplicationUser Owner { get; set; } = null!;

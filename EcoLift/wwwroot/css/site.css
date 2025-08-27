@@ -201,7 +201,7 @@ html {
 
 .navbar-light .navbar-nav .signup-link {
     transition-duration: 300ms;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     color: white;
     padding: 0.5rem 1rem;
@@ -906,7 +906,428 @@ html {
     margin-right: 0.5rem;
 }
 
-/* Login Page Styles */
+/* Form Styles - Reusable across the project */
+.form-container {
+    min-height: calc(100vh - 58px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: white;
+}
+
+.form-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-logo {
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+    color: var(--gray);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--gray);
+    font-size: 1rem;
+    z-index: 2;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: white;
+    color: var(--secondary-color);
+}
+
+/* Ensure textarea and select elements work with form-input class */
+.form-input[rows] {
+    padding: 0.875rem 1rem;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-input[multiple],
+.form-input[size] {
+    padding: 0.875rem 1rem;
+}
+
+/* Remove left padding for elements without icons */
+.input-wrapper:not(:has(.input-icon)) .form-input {
+    padding-left: 1rem;
+}
+
+/* Form Sections and Layout Enhancements */
+.form-section {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: var(--light-gray);
+}
+
+.form-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    display: inline-block;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .form-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Enhanced form input focus states */
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Specific styling for date and time inputs */
+.form-input[type="date"],
+.form-input[type="time"] {
+    padding-left: 1rem;
+}
+
+.form-input[type="date"]::-webkit-calendar-picker-indicator,
+.form-input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.form-input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.form-input[type="time"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Number input styling */
+.form-input[type="number"] {
+    padding-left: 1rem;
+}
+
+.form-input[type="number"]::-webkit-inner-spin-button,
+.form-input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+    height: 1.5rem;
+}
+
+/* Enhanced checkbox styling for ride preferences */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+}
+
+.checkbox-wrapper:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.checkbox-label {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+    flex: 1;
+}
+
+/* Responsive adjustments for form sections */
+@media (max-width: 640px) {
+    .form-section {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-section-title {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+
+.form-input::placeholder {
+    color: var(--gray);
+    opacity: 0.7;
+}
+
+.form-input.error {
+    border-color: var(--danger-color);
+}
+
+.form-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.validation-error {
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.form-checkbox {
+    display: none;
+}
+
+.checkmark {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.375rem;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.form-checkbox:checked + .checkmark {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-checkbox:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.checkbox-label {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.forgot-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.form-button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.form-button:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+}
+
+.form-button:active {
+    background: var(--primary-color-dark);
+}
+
+.form-button i {
+    transition: transform 0.2s ease;
+}
+
+.form-button:hover i {
+    transform: translateX(2px);
+}
+
+.form-divider {
+    text-align: center;
+    position: relative;
+/*    margin: 1.5rem 0;*/
+}
+
+.form-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.form-divider span {
+    background: white;
+    padding: 0 1rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.form-link.primary {
+    background: var(--light-gray);
+    color: var(--secondary-color);
+    border: 1px solid transparent;
+}
+
+.form-link.primary:hover {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.15);
+}
+
+.form-link.secondary {
+    color: var(--gray);
+    border: 1px solid var(--border-color);
+}
+
+.form-link.secondary:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    background: rgba(0, 123, 255, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .form-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+    }
+    
+    .form-title {
+        font-size: 1.5rem;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}
+
+/* Legacy login styles - keeping for backward compatibility but using new form classes */
 .login-container {
     min-height: calc(100vh - 58px);
     display: flex;
@@ -919,12 +1340,11 @@ html {
 .login-card {
     background: white;
     border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     padding: 2.5rem;
     width: 100%;
     max-width: 420px;
     position: relative;
-    overflow: hidden;
 }
 
 .login-header {
@@ -961,166 +1381,47 @@ html {
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-label {
-/*    font-weight: 600;*/
-/*    color: var(--secondary-color);*/
-/*    font-size: 0.9rem;*/
-}
-
-.input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-icon {
-    position: absolute;
-    left: 1rem;
-    color: var(--gray);
-    font-size: 1rem;
-    z-index: 2;
-}
-
-.form-input {
-    width: 100%;
-    padding: 0.875rem 1rem 0.875rem 2.75rem;
-    border: 2px solid var(--border-color);
-    border-radius: 0.75rem;
-    font-size: 1rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: white;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    transform: translateY(-1px);
-}
-
-.form-input::placeholder {
-    color: var(--gray);
-    opacity: 0.7;
-}
-
-.validation-error {
-    color: var(--danger-color);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
-
-.form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.checkbox-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    user-select: none;
-}
-
-.form-checkbox {
-    display: none;
-}
-
-.checkmark {
-    width: 1.25rem;
-    height: 1.25rem;
-    border: 2px solid var(--border-color);
-    border-radius: 0.375rem;
-    position: relative;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.form-checkbox:checked + .checkmark {
-    background: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.form-checkbox:checked + .checkmark::after {
-    content: '✓';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: bold;
-}
-
-.checkbox-label {
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    font-weight: 500;
-}
-
-.forgot-link {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.forgot-link:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
+    gap: 1.5rem;
 }
 
 .login-button {
-    background:  var(--primary-color);
+    background: var(--primary-color);
     color: white;
     border: none;
     padding: 1rem 2rem;
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    position: relative;
-    overflow: hidden;
+    width: 100%;
 }
 
 .login-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+    background: var(--primary-hover);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
 }
 
 .login-button:active {
-    transform: translateY(0);
+    background: var(--primary-color-dark);
 }
 
 .login-button i {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .login-button:hover i {
-    transform: translateX(3px);
+    transform: translateX(2px);
 }
 
 .login-divider {
     text-align: center;
     position: relative;
-/*    margin: 1rem 0;*/
+    margin: 1.5rem 0;
 }
 
 .login-divider::before {
@@ -1155,29 +1456,28 @@ html {
     justify-content: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     text-decoration: none;
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     font-size: 0.9rem;
 }
 
 .register-link {
     background: var(--light-gray);
     color: var(--secondary-color);
-    border: 2px solid transparent;
+    border: 1px solid transparent;
 }
 
 .register-link:hover {
     background: var(--primary-color);
     color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.15);
 }
 
 .resend-link {
     color: var(--gray);
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
 }
 
 .resend-link:hover {
@@ -1186,59 +1486,39 @@ html {
     background: rgba(0, 123, 255, 0.05);
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-    .login-card {
-        padding: 2rem 1.5rem;
-        margin: 1rem;
-    }
-    
-    .login-title {
-        font-size: 1.5rem;
-    }
-    
-    .form-options {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-}
-
 /* Ensure register button uses same styling */
 #registerSubmit {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    background: var(--primary-color);
     color: white;
     border: none;
     padding: 1rem 2rem;
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    position: relative;
-    overflow: hidden;
     width: 100%;
 }
 
 #registerSubmit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+    background: var(--primary-hover);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
 }
 
 #registerSubmit:active {
-    transform: translateY(0);
+    background: var(--primary-color-dark);
 }
 
 #registerSubmit i {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 #registerSubmit:hover i {
-    transform: translateX(3px);
+    transform: translateX(2px);
 }
 
 /* Navbar Action Buttons and Profile Dropdown Styles */
@@ -1506,4 +1786,710 @@ html {
 /* Hover effects for all interactive elements */
 .navbar-actions .nav-item:hover {
     /* transform: translateY(-1px); */
+}
+
+/* Rides Page Styles - Modern Design inspired by BlaBlaCar */
+.rides-page {
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.rides-page .page-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.rides-page .page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.rides-page .page-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.quick-actions .btn {
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.quick-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.25);
+}
+
+/* Rides Sections */
+.rides-section {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin: 0;
+}
+
+.section-title i {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.ride-count {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.section-actions .btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.section-actions .btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Rides Content */
+.rides-content {
+    padding: 2rem;
+}
+
+.rides-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+/* Ride Cards */
+.ride-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Ride Header */
+.ride-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.route-info {
+    flex: 1;
+}
+
+.route-points {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.route-start,
+.route-end {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.route-start i {
+    color: #28a745;
+}
+
+.route-end i {
+    color: #dc3545;
+}
+
+.route-arrow {
+    color: var(--gray);
+    font-size: 0.875rem;
+}
+
+/* Status Badges */
+.ride-status,
+.booking-status {
+    flex-shrink: 0;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status-inactive {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+.status-confirmed {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status-pending {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.status-cancelled {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+/* Ride Details */
+.ride-details {
+    margin-bottom: 1.5rem;
+}
+
+.detail-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.detail-item i {
+    width: 1rem;
+    text-align: center;
+}
+
+.detail-item .price {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.ride-notes {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--gray);
+    border-left: 3px solid var(--primary-color);
+}
+
+.ride-notes i {
+    margin-top: 0.125rem;
+    flex-shrink: 0;
+}
+
+/* Ride Actions */
+.ride-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.ride-actions .btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.ride-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+    color: var(--gray);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.empty-state .btn {
+    padding: 0.875rem 2rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .rides-page .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .quick-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .quick-actions .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .rides-content {
+        padding: 1.5rem;
+    }
+    
+    .ride-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .route-points {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+    
+    .route-arrow {
+        transform: rotate(90deg);
+        margin-left: 1.5rem;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .ride-actions {
+        justify-content: center;
+    }
+    
+    .ride-actions .btn {
+        flex: 1;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .rides-page .page-header {
+        padding: 2rem 0;
+    }
+    
+    .rides-content {
+        padding: 1rem;
+    }
+    
+    .ride-card {
+        padding: 1rem;
+    }
+    
+    .section-header {
+        padding: 1rem 1.5rem;
+    }
+}
+
+/* Create Ride Page Styles - Full Page Design */
+.create-ride-page {
+    background: white;
+    min-height: 100vh;
+}
+
+.page-header {
+    background: var(--light-gray);
+    padding: 3rem 0;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: var(--gray);
+    margin: 0;
+}
+
+/* Progress Steps */
+.progress-steps {
+    background: white;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.progress-steps .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step-number {
+    width: 3rem;
+    height: 3rem;
+    background: var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--gray);
+    transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+    background: var(--primary-color);
+    color: white;
+}
+
+.step-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+/* Form Container */
+.form-container {
+    padding: 1.5rem 0;
+    background: white;
+}
+
+.form-container .container {
+    max-width: 800px;
+}
+
+/* Form Steps */
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.step-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.step-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.step-header p {
+    color: var(--gray);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Form Fields */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+    margin-bottom: 1rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Step Actions */
+.step-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-prev,
+.btn-next,
+.btn-submit {
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-prev {
+    background: var(--light-gray);
+    color: var(--secondary-color);
+}
+
+.btn-prev:hover {
+    background: #e9ecef;
+}
+
+.btn-next {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-next:hover {
+    background: var(--primary-hover);
+}
+
+.btn-submit {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-submit:hover {
+    background: #218838;
+}
+
+/* Validation Errors */
+.validation-error {
+    color: var(--danger-color);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .progress-steps .container {
+        gap: 2rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .step-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .btn-prev,
+    .btn-next,
+    .btn-submit {
+        width: 100%;
+    }
+}
+
+/* Trip Details Container with Map */
+.trip-details-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.map-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.google-map {
+    width: 100%;
+    height: 400px;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.map-info {
+    background: var(--light-gray);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.map-info p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.map-info strong {
+    color: var(--primary-color);
+}
+
+/* Responsive design for map layout */
+@media (max-width: 1024px) {
+    .trip-details-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .google-map {
+        height: 300px;
+    }
 }

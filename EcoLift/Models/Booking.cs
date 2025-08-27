@@ -31,6 +31,10 @@ namespace EcoLift.Models
         public virtual Trip Trip { get; set; } = null!;
         public virtual ApplicationUser Seeker { get; set; } = null!;
         
+        // Conversation link
+        public int? ConversationId { get; set; }
+        public virtual Conversation? Conversation { get; set; }
+        
         // Computed properties
         public decimal TotalCost => Trip?.PricePerSeat * SeatsBooked ?? 0;
         public bool IsActive => Status == BookingStatus.Pending || Status == BookingStatus.Confirmed;

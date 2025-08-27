@@ -4,69 +4,69 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="login-container">
-    <div class="login-card">
-     
+<div class="form-container">
+    <div class="form-card">
+       
 
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="login-form">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-            <div class="form-group">
+            
+            <div >
                 <label asp-for="Input.FirstName" class="form-label">First Name</label>
                 <div class="input-wrapper">
                     <i class="fas fa-user input-icon"></i>
-                    <input asp-for="Input.FirstName" class="form-input" autocomplete="given-name" aria-required="true" placeholder="Enter your first name" />
+                    <input asp-for="Input.FirstName" class="form-input" autocomplete="given-name" aria-required="true" placeholder="Enter your first name" style="padding: 0.875rem 1rem 0.875rem 2.75rem" />
                 </div>
                 <span asp-validation-for="Input.FirstName" class="validation-error"></span>
             </div>
 
-            <div class="form-group">
+            <div >
                 <label asp-for="Input.LastName" class="form-label">Last Name</label>
                 <div class="input-wrapper">
                     <i class="fas fa-user input-icon"></i>
-                    <input asp-for="Input.LastName" class="form-input" autocomplete="family-name" aria-required="true" placeholder="Enter your last name" />
+                    <input asp-for="Input.LastName" class="form-input" autocomplete="family-name" aria-required="true" placeholder="Enter your last name" style="padding: 0.875rem 1rem 0.875rem 2.75rem" />
                 </div>
                 <span asp-validation-for="Input.LastName" class="validation-error"></span>
             </div>
-            <div class="form-group">
+            
+            <div >
                 <label asp-for="Input.Email" class="form-label">Email Address</label>
                 <div class="input-wrapper">
                     <i class="fas fa-envelope input-icon"></i>
-                    <input asp-for="Input.Email" class="form-input" autocomplete="username" aria-required="true" placeholder="Enter your email" />
+                    <input asp-for="Input.Email" class="form-input" autocomplete="username" aria-required="true" placeholder="Enter your email" style="padding: 0.875rem 1rem 0.875rem 2.75rem" />
                 </div>
                 <span asp-validation-for="Input.Email" class="validation-error"></span>
             </div>
 
-            
-
-            <div class="form-group">
+            <div>
                 <label asp-for="Input.Password" class="form-label">Password</label>
                 <div class="input-wrapper">
                     <i class="fas fa-lock input-icon"></i>
-                    <input asp-for="Input.Password" class="form-input" autocomplete="new-password" aria-required="true" placeholder="Create a password" />
+                    <input asp-for="Input.Password" class="form-input" autocomplete="new-password" aria-required="true" placeholder="Create a password" style="padding: 0.875rem 1rem 0.875rem 2.75rem" />
                 </div>
                 <span asp-validation-for="Input.Password" class="validation-error"></span>
             </div>
 
-            <div class="form-group">
+            <div >
                 <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
                 <div class="input-wrapper">
                     <i class="fas fa-lock input-icon"></i>
-                    <input asp-for="Input.ConfirmPassword" class="form-input" autocomplete="new-password" aria-required="true" placeholder="Confirm your password" />
+                    <input asp-for="Input.ConfirmPassword" class="form-input" autocomplete="new-password" aria-required="true" placeholder="Confirm your password" style="padding: 0.875rem 1rem 0.875rem 2.75rem" />
                 </div>
                 <span asp-validation-for="Input.ConfirmPassword" class="validation-error"></span>
             </div>
 
-            <button id="registerSubmit" type="submit" class="login-button">
+            <button id="registerSubmit" type="submit" class="form-button">
                 <span>Create Account</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
 
-            <div class="login-divider">
+            <div class="form-divider">
                 <span>Already have an account?</span>
             </div>
 
-            <div class="login-links">
-                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="register-link">
+            <div class="form-links">
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="form-link primary">
                     <i class="fas fa-sign-in-alt"></i>
                     Sign In
                 </a>

@@ -1,0 +1,348 @@
+@model EcoLift.Models.ViewModels.EditTravelPreferencesViewModel
+@{
+    ViewData["Title"] = "Travel Preferences";
+    ViewData["HideFooter"] = true;
+}
+
+<div class="edit-preferences-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="edit-form-card">
+                    <div class="form-header">
+                        <h2>Travel Preferences</h2>
+                        <p>Let other travelers know what to expect when riding with you</p>
+                    </div>
+
+                    <form asp-action="EditTravelPreferences" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Chattiness Level -->
+                        <div class="preference-section">
+                            <div class="preference-header">
+                                <i class="fas fa-comments preference-icon"></i>
+                                <div>
+                                    <h5>Chattiness</h5>
+                                    <p>How talkative are you during rides?</p>
+                                </div>
+                            </div>
+                            <div class="preference-options">
+                                <div class="form-check preference-option">
+                                    <input asp-for="ChattinessLevel" type="radio" value="@((int)EcoLift.Models.Enums.ChattinessLevel.Quiet)" 
+                                           class="form-check-input" id="chattiness-quiet" />
+                                    <label class="form-check-label" for="chattiness-quiet">
+                                        <strong>I'm quiet when I feel comfortable</strong>
+                                        <span class="option-description">I prefer peaceful rides with minimal conversation</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="ChattinessLevel" type="radio" value="@((int)EcoLift.Models.Enums.ChattinessLevel.Moderate)" 
+                                           class="form-check-input" id="chattiness-moderate" />
+                                    <label class="form-check-label" for="chattiness-moderate">
+                                        <strong>I chat when I feel comfortable</strong>
+                                        <span class="option-description">I enjoy good conversation but respect quiet moments</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="ChattinessLevel" type="radio" value="@((int)EcoLift.Models.Enums.ChattinessLevel.Chatty)" 
+                                           class="form-check-input" id="chattiness-chatty" />
+                                    <label class="form-check-label" for="chattiness-chatty">
+                                        <strong>I'm chatty when I feel comfortable</strong>
+                                        <span class="option-description">I love meeting new people and having conversations</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Music Preference -->
+                        <div class="preference-section">
+                            <div class="preference-header">
+                                <i class="fas fa-music preference-icon"></i>
+                                <div>
+                                    <h5>Music</h5>
+                                    <p>What's your music preference during rides?</p>
+                                </div>
+                            </div>
+                            <div class="preference-options">
+                                <div class="form-check preference-option">
+                                    <input asp-for="MusicPreference" type="radio" value="@((int)EcoLift.Models.Enums.MusicPreference.NoMusic)" 
+                                           class="form-check-input" id="music-none" />
+                                    <label class="form-check-label" for="music-none">
+                                        <strong>I prefer silence</strong>
+                                        <span class="option-description">I like quiet rides without music</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="MusicPreference" type="radio" value="@((int)EcoLift.Models.Enums.MusicPreference.Quiet)" 
+                                           class="form-check-input" id="music-quiet" />
+                                    <label class="form-check-label" for="music-quiet">
+                                        <strong>I like quiet music</strong>
+                                        <span class="option-description">Soft background music is nice</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="MusicPreference" type="radio" value="@((int)EcoLift.Models.Enums.MusicPreference.Moderate)" 
+                                           class="form-check-input" id="music-moderate" />
+                                    <label class="form-check-label" for="music-moderate">
+                                        <strong>I jam depending on the mood</strong>
+                                        <span class="option-description">Music volume depends on the vibe</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="MusicPreference" type="radio" value="@((int)EcoLift.Models.Enums.MusicPreference.Loud)" 
+                                           class="form-check-input" id="music-loud" />
+                                    <label class="form-check-label" for="music-loud">
+                                        <strong>I love loud music</strong>
+                                        <span class="option-description">Turn it up and let's rock the road!</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Smoking Policy -->
+                        <div class="preference-section">
+                            <div class="preference-header">
+                                <i class="fas fa-smoking preference-icon"></i>
+                                <div>
+                                    <h5>Smoking</h5>
+                                    <p>What's your policy on smoking during rides?</p>
+                                </div>
+                            </div>
+                            <div class="preference-options">
+                                <div class="form-check preference-option">
+                                    <input asp-for="SmokingPolicy" type="radio" value="@((int)EcoLift.Models.Enums.SmokingPolicy.NoSmoking)" 
+                                           class="form-check-input" id="smoking-no" />
+                                    <label class="form-check-label" for="smoking-no">
+                                        <strong>No smoking</strong>
+                                        <span class="option-description">Smoke-free rides only</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="SmokingPolicy" type="radio" value="@((int)EcoLift.Models.Enums.SmokingPolicy.SmokingBreaks)" 
+                                           class="form-check-input" id="smoking-breaks" />
+                                    <label class="form-check-label" for="smoking-breaks">
+                                        <strong>Cigarette breaks outside the car are ok</strong>
+                                        <span class="option-description">We can stop for smoking breaks</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="SmokingPolicy" type="radio" value="@((int)EcoLift.Models.Enums.SmokingPolicy.SmokingAllowed)" 
+                                           class="form-check-input" id="smoking-allowed" />
+                                    <label class="form-check-label" for="smoking-allowed">
+                                        <strong>Smoking allowed</strong>
+                                        <span class="option-description">Smoking is allowed in the car</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pet Policy -->
+                        <div class="preference-section">
+                            <div class="preference-header">
+                                <i class="fas fa-paw preference-icon"></i>
+                                <div>
+                                    <h5>Pets</h5>
+                                    <p>Are you comfortable traveling with pets?</p>
+                                </div>
+                            </div>
+                            <div class="preference-options">
+                                <div class="form-check preference-option">
+                                    <input asp-for="PetPolicy" type="radio" value="@((int)EcoLift.Models.Enums.PetPolicy.NoPets)" 
+                                           class="form-check-input" id="pets-no" />
+                                    <label class="form-check-label" for="pets-no">
+                                        <strong>No pets</strong>
+                                        <span class="option-description">I prefer pet-free rides</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="PetPolicy" type="radio" value="@((int)EcoLift.Models.Enums.PetPolicy.SmallPets)" 
+                                           class="form-check-input" id="pets-small" />
+                                    <label class="form-check-label" for="pets-small">
+                                        <strong>Small pets ok</strong>
+                                        <span class="option-description">Small, well-behaved pets are welcome</span>
+                                    </label>
+                                </div>
+                                <div class="form-check preference-option">
+                                    <input asp-for="PetPolicy" type="radio" value="@((int)EcoLift.Models.Enums.PetPolicy.AllPets)" 
+                                           class="form-check-input" id="pets-all" />
+                                    <label class="form-check-label" for="pets-all">
+                                        <strong>I'll travel with pets depending on the animal</strong>
+                                        <span class="option-description">I love animals and am happy to travel with them</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Save Preferences
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.edit-preferences-page {
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.edit-form-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-header h2 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: #6c757d;
+    margin: 0;
+}
+
+.preference-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.preference-section:last-of-type {
+    border-bottom: none;
+}
+
+.preference-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.preference-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.preference-header h5 {
+    margin: 0 0 0.25rem 0;
+    color: #2c3e50;
+}
+
+.preference-header p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.preference-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.preference-option {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.preference-option:hover {
+    border-color: #007bff;
+    background-color: #f8f9ff;
+}
+
+.preference-option .form-check-input:checked + .form-check-label {
+    color: #007bff;
+}
+
+.preference-option .form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.form-check-input {
+    margin-top: 0.2rem;
+}
+
+.form-check-label {
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.form-check-label strong {
+    display: block;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.option-description {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+
+
+@@media (max-width: 768px) {
+    .edit-preferences-page {
+        padding: 1rem 0;
+    }
+    
+    .edit-form-card {
+        padding: 1.5rem;
+    }
+    
+    .preference-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Session Test";
+}
+
+<div class="container mt-5">
+    <h1>Session Test</h1>
+    
+    @if (ViewBag.SessionError != null)
+    {
+        <div class="alert alert-danger">
+            <h4>Session Error:</h4>
+            <p>@ViewBag.SessionError</p>
+        </div>
+    }
+    
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Session Information</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Session ID:</strong> @ViewBag.SessionId
+                </li>
+                <li class="list-group-item">
+                    <strong>Session Available:</strong> @ViewBag.SessionAvailable
+                </li>
+                <li class="list-group-item">
+                    <strong>Test Value:</strong> @ViewBag.SessionTest
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="@Url.Action("TestSession", "Home")" class="btn btn-primary">Refresh</a>
+        <a href="@Url.Action("Search", "Home")" class="btn btn-secondary">Go to Search</a>
+    </div>
+</div>

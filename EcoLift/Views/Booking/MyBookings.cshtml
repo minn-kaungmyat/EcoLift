@@ -1,0 +1,399 @@
+@model IEnumerable<EcoLift.Models.Booking>
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="bookings-page">
+    <div class="container">
+        <div class="bookings-header">
+            <h1 class="bookings-title">My Bookings</h1>
+            <p class="bookings-subtitle">Manage your upcoming carpooling trips</p>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="no-bookings">
+                <div class="no-bookings-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <h3>No Bookings Yet</h3>
+                <p>You haven't made any bookings yet. Start by searching for available rides!</p>
+                <a href="@Url.Action("Search", "Home")" class="btn-search-rides">
+                    <i class="fas fa-search"></i>
+                    Search for Rides
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="bookings-grid">
+                @foreach (var booking in Model)
+                {
+                    <div class="booking-card">
+                        <div class="booking-header">
+                            <div class="booking-route">
+                                <div class="route-point pickup">
+                                    <i class="fas fa-circle"></i>
+                                    <span>@booking.Trip.PickupLocation</span>
+                                </div>
+                                <div class="route-line">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                                <div class="route-point dropoff">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>@booking.Trip.DropoffLocation</span>
+                                </div>
+                            </div>
+                            <div class="booking-status">
+                                <span class="status-badge confirmed">Confirmed</span>
+                            </div>
+                        </div>
+
+                        <div class="booking-details">
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>@booking.Trip.DepartureDate.ToString("MMM dd, yyyy")</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>@(booking.Trip.DepartureTime.ToString(@"hh\:mm"))</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>@booking.Trip.Provider.FirstName @booking.Trip.Provider.LastName</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>@booking.SeatsBooked seat(s) booked</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <i class="fas fa-euro-sign"></i>
+                                    <span>€@booking.TotalCost.ToString("F2") total</span>
+                                </div>
+                                @if (booking.Trip.Vehicle != null)
+                                {
+                                    <div class="detail-item">
+                                        <i class="fas fa-car"></i>
+                                        <span>@booking.Trip.Vehicle.Brand @booking.Trip.Vehicle.Model</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="booking-actions">
+                            @if (booking.Trip.DepartureDateTime > DateTime.Now.AddHours(24))
+                            {
+                                <form method="post" action="@Url.Action("Cancel", "Booking", new { id = booking.BookingId })" 
+                                      onsubmit="return confirm('Are you sure you want to cancel this booking?')" 
+                                      style="display: inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-action btn-cancel-booking">
+                                        <i class="fas fa-times"></i>
+                                        Cancel Booking
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="cancellation-notice">
+                                    <i class="fas fa-info-circle"></i>
+                                    Cancellation not available within 24 hours
+                                </span>
+                            }
+                            
+                            @if (booking.Status == EcoLift.Models.Enums.BookingStatus.Confirmed)
+                            {
+                                <a href="@Url.Action("Chat", "Message", new { conversationId = booking.ConversationId })" class="btn-action btn-contact-driver">
+                                    <i class="fas fa-comment"></i>
+                                    Message Driver
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">
+                                    <i class="fas fa-info-circle"></i>
+                                    Messaging available after booking confirmation
+                                </span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+.bookings-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.bookings-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.bookings-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.bookings-subtitle {
+    font-size: 1.1rem;
+    color: var(--gray);
+}
+
+.no-bookings {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.no-bookings-icon {
+    font-size: 4rem;
+    color: #d1d5db;
+    margin-bottom: 1.5rem;
+}
+
+.no-bookings h3 {
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.no-bookings p {
+    color: #6b7280;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.btn-search-rides {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-search-rides:hover {
+    background: var(--primary-hover);
+    color: white;
+    text-decoration: none;
+}
+
+.bookings-grid {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.booking-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.booking-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+}
+
+.booking-route {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.route-point {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.route-point.pickup i {
+    color: var(--success-color);
+    font-size: 0.75rem;
+}
+
+.route-point.dropoff i {
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.route-line {
+    color: #9ca3af;
+    flex: 1;
+    text-align: center;
+}
+
+.booking-status {
+    margin-left: 1rem;
+}
+
+.status-badge {
+    padding: 0.375rem 0.875rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.confirmed {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.booking-details {
+    margin-bottom: 1.25rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.detail-item i {
+    color: #9ca3af;
+    width: 16px;
+    text-align: center;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+    align-items: center;
+}
+
+.btn-action {
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.btn-cancel-booking {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+.btn-cancel-booking:hover {
+    background-color: #fecaca;
+    color: #dc2626;
+}
+
+.btn-contact-driver {
+    background-color: white;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-contact-driver:hover {
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+}
+
+.cancellation-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+.cancellation-notice i {
+    color: #9ca3af;
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .bookings-title {
+        font-size: 2rem;
+    }
+    
+    .booking-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .booking-route {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .route-line {
+        display: none;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .booking-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-action {
+        justify-content: center;
+    }
+}
+</style>

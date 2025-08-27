@@ -4,6 +4,7 @@ using EcoLift.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcoLift.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250827150854_AddConversationBasedMessaging")]
+    partial class AddConversationBasedMessaging
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,9 +137,6 @@ namespace EcoLift.Data.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ConversationId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SeatsBooked")
                         .HasColumnType("int");
 
@@ -152,8 +152,6 @@ namespace EcoLift.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("BookingId");
-
-                    b.HasIndex("ConversationId");
 
                     b.HasIndex("SeekerId");
 
@@ -555,11 +553,6 @@ namespace EcoLift.Data.Migrations
 
             modelBuilder.Entity("EcoLift.Models.Booking", b =>
                 {
-                    b.HasOne("EcoLift.Models.Conversation", "Conversation")
-                        .WithMany()
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("EcoLift.Models.ApplicationUser", "Seeker")
                         .WithMany("Bookings")
                         .HasForeignKey("SeekerId")
@@ -571,8 +564,6 @@ namespace EcoLift.Data.Migrations
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Conversation");
 
                     b.Navigation("Seeker");
 

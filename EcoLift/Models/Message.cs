@@ -8,34 +8,28 @@ namespace EcoLift.Models
         [Key]
         public int MessageId { get; set; }
         
+        [Required]
+        [ForeignKey("Conversation")]
+        public int ConversationId { get; set; }
+        
+        [Required]
         [ForeignKey("Sender")]
-        public string? SenderId { get; set; } // Nullable for guest messages
-        
-        [Required]
-        [StringLength(100)]
-        [EmailAddress]
-        public string SenderEmail { get; set; } = string.Empty;
-        
-        [Required]
-        [StringLength(100)]
-        public string Subject { get; set; } = string.Empty;
+        public string SenderId { get; set; } = string.Empty;
         
         [Required]
         [StringLength(2000)]
         public string Content { get; set; } = string.Empty;
         
         [Required]
-        public DateTime SentDate { get; set; } = DateTime.UtcNow;
+        public DateTime SentAt { get; set; } = DateTime.UtcNow;
         
         public bool IsRead { get; set; } = false;
         
         // Navigation properties
-        public virtual ApplicationUser? Sender { get; set; } // Nullable for guest messages
-        
-        // Computed property to determine if message is from a guest
-        public bool IsFromGuest => SenderId == null;
+        public virtual Conversation Conversation { get; set; } = null!;
+        public virtual ApplicationUser Sender { get; set; } = null!;
         
         // Computed property to get sender display name
-        public string SenderDisplayName => Sender?.FullName ?? SenderEmail;
+        public string SenderDisplayName => Sender?.FullName ?? "Unknown User";
     }
 }
