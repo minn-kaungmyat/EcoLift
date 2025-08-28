@@ -295,5 +295,57 @@ namespace EcoLift.Controllers
             }
             return View(model);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
+            // First, check if the user is the provider of this ride (created ride)
+            var trip = await _context.Trips
+                .Include(t => t.Provider)
+                .Include(t => t.Vehicle)
+                .Include(t => t.Bookings)
+                    .ThenInclude(b => b.Seeker)
+                .Include(t => t.Reviews)
+                .FirstOrDefaultAsync(t => t.TripId == id && t.ProviderId == user.Id);
+
+            if (trip != null)
+            {
+                // User is the provider - show full details with all bookings
+                ViewBag.IsProvider = true;
+                ViewBag.UserBookings = trip.Bookings.Where(b => b.Status == BookingStatus.Confirmed).ToList();
+                return View(trip);
+            }
+
+            // If not the provider, check if user has booked this ride
+            var booking = await _context.Bookings
+                .Where(b => b.TripId == id && b.SeekerId == user.Id)
+                .Include(b => b.Trip)
+                    .ThenInclude(t => t.Provider)
+                .Include(b => b.Trip)
+                    .ThenInclude(t => t.Vehicle)
+                .Include(b => b.Trip)
+                    .ThenInclude(t => t.Bookings)
+                        .ThenInclude(bk => bk.Seeker)
+                .Include(b => b.Trip)
+                    .ThenInclude(t => t.Reviews)
+                .FirstOrDefaultAsync();
+
+            if (booking != null)
+            {
+                // User has booked this ride - show details with their booking info
+                ViewBag.IsProvider = false;
+                ViewBag.UserBooking = booking;
+                return View(booking.Trip);
+            }
+
+            // User has no access to this ride
+            TempData["ErrorMessage"] = "Ride not found or you don't have permission to view it.";
+            return RedirectToAction("Index");
+        }
     }
 }

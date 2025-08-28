@@ -106,13 +106,9 @@
                             </div>
 
                             <div class="ride-actions">
-                                <a asp-controller="Ride" asp-action="Edit" asp-route-id="@ride.TripId" class="btn-action btn-edit">
-                                    <i class="fas fa-edit"></i>
-                                    Edit
-                                </a>
-                                <a href="#" class="btn-action btn-bookings">
-                                    <i class="fas fa-list"></i>
-                                    View Bookings
+                                <a asp-controller="Ride" asp-action="Details" asp-route-id="@ride.TripId" class="btn-action btn-details">
+                                    <i class="fas fa-eye"></i>
+                                    Details
                                 </a>
                             </div>
                         </div>
@@ -198,15 +194,6 @@
                                         <i class="fas fa-comment"></i>
                                         Message Driver
                                     </a>
-                                    @if (booking.Trip.DepartureDateTime > DateTime.Now.AddHours(24))
-                                    {
-                                        <form method="post" action="@Url.Action("Cancel", "Booking", new { id = booking.BookingId })" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this booking?')">
-                                            <button type="submit" class="btn-action btn-cancel">
-                                                <i class="fas fa-times"></i>
-                                                Cancel Booking
-                                            </button>
-                                        </form>
-                                    }
                                 }
                                 else
                                 {
@@ -215,9 +202,9 @@
                                         Message Driver
                                     </span>
                                 }
-                                <a href="#" class="btn-action btn-details">
+                                <a asp-controller="Ride" asp-action="Details" asp-route-id="@ride.TripId" class="btn-action btn-details">
                                     <i class="fas fa-eye"></i>
-                                    View Details
+                                    Details
                                 </a>
                             </div>
                         </div>

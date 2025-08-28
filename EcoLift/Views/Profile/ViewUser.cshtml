@@ -1,0 +1,480 @@
+@model EcoLift.Models.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = $"{Model.User.FirstName} {Model.User.LastName}'s Profile";
+    ViewData["HideFooter"] = true;
+}
+
+<div class="profile-page">
+    <div class="container">
+        <!-- Back Navigation -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Ride" asp-action="Index">My Rides</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    @Model.User.FirstName's Profile
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- Profile Sidebar -->
+            <div class="col-lg-4 mb-4">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            @if (!string.IsNullOrEmpty(Model.User.ProfilePicture))
+                            {
+                                <img src="@Model.User.ProfilePicture" alt="Profile Picture" class="avatar-img">
+                            }
+                            else
+                            {
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            }
+                        </div>
+                        <h3 class="profile-name">@Model.User.FirstName @Model.User.LastName</h3>
+                        <p class="profile-member-since">Member since @Model.User.RegistrationDate.ToString("MMMM yyyy")</p>
+                    </div>
+
+                    <div class="profile-bio">
+                        @if (!string.IsNullOrEmpty(Model.User.Bio))
+                        {
+                            <p>@Model.User.Bio</p>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No bio added yet.</p>
+                        }
+                    </div>
+
+                    <!-- Contact Information -->
+                    @if (!string.IsNullOrEmpty(Model.User.PhoneNumber))
+                    {
+                        <div class="profile-contact">
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>@Model.User.PhoneNumber</span>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Ride Statistics -->
+                    <div class="profile-stats">
+                        <h5 class="stats-title">Ride Statistics</h5>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value">@ViewBag.PublishedRidesCount</div>
+                                <div class="stat-label">Rides Offered</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">@ViewBag.CompletedRidesCount</div>
+                                <div class="stat-label">Completed</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">@ViewBag.TotalBookingsCount</div>
+                                <div class="stat-label">Trips Taken</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Travel Preferences -->
+                <div class="content-card mb-4">
+                    <div class="card-header">
+                        <h4>Travel Preferences</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="preferences-grid">
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <div class="preference-content">
+                                    <h6>Chattiness</h6>
+                                    <span class="preference-value">
+                                        @switch (Model.User.ChattinessLevel)
+                                        {
+                                            case EcoLift.Models.Enums.ChattinessLevel.Quiet:
+                                                <span class="badge bg-light text-dark">I'm quiet when I feel comfortable</span>
+                                                break;
+                                            case EcoLift.Models.Enums.ChattinessLevel.Moderate:
+                                                <span class="badge bg-primary">I chat when I feel comfortable</span>
+                                                break;
+                                            case EcoLift.Models.Enums.ChattinessLevel.Chatty:
+                                                <span class="badge bg-success">I'm chatty when I feel comfortable</span>
+                                                break;
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <i class="fas fa-music"></i>
+                                </div>
+                                <div class="preference-content">
+                                    <h6>Music</h6>
+                                    <span class="preference-value">
+                                        @switch (Model.User.MusicPreference)
+                                        {
+                                            case EcoLift.Models.Enums.MusicPreference.NoMusic:
+                                                <span class="badge bg-light text-dark">I prefer silence</span>
+                                                break;
+                                            case EcoLift.Models.Enums.MusicPreference.Quiet:
+                                                <span class="badge bg-info">I like quiet music</span>
+                                                break;
+                                            case EcoLift.Models.Enums.MusicPreference.Moderate:
+                                                <span class="badge bg-primary">I jam depending on the mood</span>
+                                                break;
+                                            case EcoLift.Models.Enums.MusicPreference.Loud:
+                                                <span class="badge bg-warning">I love loud music</span>
+                                                break;
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <i class="fas fa-smoking"></i>
+                                </div>
+                                <div class="preference-content">
+                                    <h6>Smoking</h6>
+                                    <span class="preference-value">
+                                        @switch (Model.User.SmokingPolicy)
+                                        {
+                                            case EcoLift.Models.Enums.SmokingPolicy.NoSmoking:
+                                                <span class="badge bg-success">No smoking</span>
+                                                break;
+                                            case EcoLift.Models.Enums.SmokingPolicy.SmokingBreaks:
+                                                <span class="badge bg-warning">Cigarette breaks outside the car are ok</span>
+                                                break;
+                                            case EcoLift.Models.Enums.SmokingPolicy.SmokingAllowed:
+                                                <span class="badge bg-danger">Smoking allowed</span>
+                                                break;
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <i class="fas fa-paw"></i>
+                                </div>
+                                <div class="preference-content">
+                                    <h6>Pets</h6>
+                                    <span class="preference-value">
+                                        @switch (Model.User.PetPolicy)
+                                        {
+                                            case EcoLift.Models.Enums.PetPolicy.NoPets:
+                                                <span class="badge bg-light text-dark">No pets</span>
+                                                break;
+                                            case EcoLift.Models.Enums.PetPolicy.SmallPets:
+                                                <span class="badge bg-info">Small pets ok</span>
+                                                break;
+                                            case EcoLift.Models.Enums.PetPolicy.AllPets:
+                                                <span class="badge bg-success">I'll travel with pets depending on the animal</span>
+                                                break;
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicles -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h4>Vehicles</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Vehicles.Any())
+                        {
+                            <div class="vehicles-grid">
+                                @foreach (var vehicle in Model.Vehicles)
+                                {
+                                    <div class="vehicle-card">
+                                        <div class="vehicle-info">
+                                            <h6>@vehicle.Brand @vehicle.Model</h6>
+                                            <p class="vehicle-details">
+                                                <span class="vehicle-color">@vehicle.Color</span>
+                                            </p>
+                                            <p class="vehicle-plate">@vehicle.LicensePlate</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="empty-state">
+                                <i class="fas fa-car fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No vehicles listed</h5>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-page {
+    padding: 2rem 0;
+    background-color: white;
+    min-height: 100vh;
+}
+
+.breadcrumb {
+    background: transparent;
+    margin-bottom: 2rem;
+}
+
+.breadcrumb-item a {
+    color: rgba(0, 123, 255, 0.8);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.profile-avatar {
+    margin-bottom: 1.5rem;
+}
+
+.avatar-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #e9ecef;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #6c757d;
+}
+
+.profile-name {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+}
+
+.profile-member-since {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.profile-bio {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.profile-contact {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.contact-item i {
+    color: #6c757d;
+    width: 16px;
+}
+
+.profile-stats {
+    text-align: left;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.stats-title {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.content-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    background: white;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h4 {
+    margin: 0;
+    flex: 1;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.preferences-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.preference-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.preference-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e3f2fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1976d2;
+    flex-shrink: 0;
+}
+
+.preference-content h6 {
+    margin: 0 0 0.25rem 0;
+    color: #2c3e50;
+}
+
+.vehicles-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.vehicle-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #f8f9fa;
+}
+
+.vehicle-info h6 {
+    margin: 0 0 0.25rem 0;
+    color: #2c3e50;
+}
+
+.vehicle-details {
+    margin: 0 0 0.25rem 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.vehicle-plate {
+    margin: 0;
+    font-weight: 600;
+    color: #495057;
+    font-family: monospace;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .profile-page {
+        padding: 1rem 0;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .vehicle-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .stat-item {
+        padding: 0.75rem;
+    }
+
+    .preference-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+</style>

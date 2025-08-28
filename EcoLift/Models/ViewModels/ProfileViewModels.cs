@@ -7,6 +7,7 @@ namespace EcoLift.Models.ViewModels
     {
         public ApplicationUser User { get; set; } = null!;
         public List<Vehicle> Vehicles { get; set; } = new();
+        public bool IsOwnProfile { get; set; } = true;
     }
 
     public class EditPersonalDetailsViewModel

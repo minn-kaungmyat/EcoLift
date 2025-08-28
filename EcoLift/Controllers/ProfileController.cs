@@ -330,5 +330,80 @@ namespace EcoLift.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        // GET: Profile/ViewUser/5
+        public async Task<IActionResult> ViewUser(string id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
+            // Prevent users from viewing their own profile through this action
+            if (currentUser.Id == id)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Check if the current user is connected to the target user through rides
+            var hasConnection = await HasRideConnection(currentUser.Id, id);
+            if (!hasConnection)
+            {
+                TempData["ErrorMessage"] = "You can only view profiles of users you're connected to through rides.";
+                return RedirectToAction("Index", "Ride");
+            }
+
+            var targetUser = await _userManager.FindByIdAsync(id);
+            if (targetUser == null)
+            {
+                return NotFound();
+            }
+
+            var vehicles = await _context.Vehicles
+                .Where(v => v.OwnerId == id)
+                .ToListAsync();
+
+            // Get ride statistics for the user
+            var publishedRides = await _context.Trips
+                .Where(t => t.ProviderId == id)
+                .CountAsync();
+
+            var completedRides = await _context.Trips
+                .Where(t => t.ProviderId == id && t.Status == EcoLift.Models.Enums.TripStatus.Completed)
+                .CountAsync();
+
+            var totalBookings = await _context.Bookings
+                .Where(b => b.SeekerId == id && b.Status == EcoLift.Models.Enums.BookingStatus.Confirmed)
+                .CountAsync();
+
+            var viewModel = new ProfileViewModel
+            {
+                User = targetUser,
+                Vehicles = vehicles,
+                IsOwnProfile = false
+            };
+
+            ViewBag.PublishedRidesCount = publishedRides;
+            ViewBag.CompletedRidesCount = completedRides;
+            ViewBag.TotalBookingsCount = totalBookings;
+
+            return View("ViewUser", viewModel);
+        }
+
+        private async Task<bool> HasRideConnection(string currentUserId, string targetUserId)
+        {
+            // Check if current user has booked rides from target user (target is provider)
+            var hasBookedFromTarget = await _context.Bookings
+                .AnyAsync(b => b.SeekerId == currentUserId &&
+                              b.Trip.ProviderId == targetUserId);
+
+            // Check if target user has booked rides from current user (current is provider)
+            var targetHasBookedFromCurrent = await _context.Bookings
+                .AnyAsync(b => b.SeekerId == targetUserId &&
+                              b.Trip.ProviderId == currentUserId);
+
+            return hasBookedFromTarget || targetHasBookedFromCurrent;
+        }
     }
 }
